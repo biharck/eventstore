@@ -13,6 +13,7 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'jacoco'
+apply plugin: 'info.solidsoft.pitest'
 
 group = 'org.eventstore'
 version = '0.0.1-SNAPSHOT'
@@ -34,7 +35,6 @@ test {
 
 pitest {
     targetClasses = ['org.eventstore.*']
-    testSourceSets = [sourceSets.unitTest]
     threads = 4
     outputFormats = ['XML', 'HTML']
     coverageThreshold = 95
