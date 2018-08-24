@@ -1,1 +1,1 @@
-# eventstore
+# eventstore project
