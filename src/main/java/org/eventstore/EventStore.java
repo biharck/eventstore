@@ -9,7 +9,7 @@ public class EventStore {
 
     }
 
-    public EventStream getEventStream(String streamId){
+    public EventStream getEventStream(String aggregation, String streamId){
         return null;
     }
 

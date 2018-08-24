@@ -4,7 +4,7 @@ import org.eventstore.models.Event;
 
 import java.util.List;
 
-public class InMemory implements Provider{
+public class InMemoryProvider implements Provider{
 
     @Override
     public List addEvent(String streamId, Event event, String aggregation) {

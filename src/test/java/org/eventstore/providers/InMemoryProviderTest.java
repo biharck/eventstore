@@ -4,7 +4,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import static org.hamcrest.core.Is.is;
 
-public class InMemoryTest {
+public class InMemoryProviderTest {
 
     @Test
     public void shouldAddAnEventToTheEndOfTheStream(){
