@@ -1,16 +1,17 @@
 package org.eventstore;
 
-import org.eventstore.models.EventStream;
 import org.eventstore.providers.Provider;
 
 public class EventStore {
 
-    public EventStore(Provider provider){
+    private final Provider provider;
 
+    public EventStore(Provider provider){
+        this.provider = provider;
     }
 
     public EventStream getEventStream(String aggregation, String streamId){
-        return null;
+        return new EventStream(this.provider, aggregation, streamId);
     }
 
 }

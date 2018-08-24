@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.eventstore.providers.InMemoryProviderTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2018-08-24T22:53:35" hostname="Thiagos-MacBook-Pro.local" time="0.005">
+  <properties/>
+  <testcase name="shouldReturnTheStreamList" classname="org.eventstore.providers.InMemoryProviderTest" time="0.004"/>
+  <testcase name="shouldAddAnEventToTheEndOfTheStream" classname="org.eventstore.providers.InMemoryProviderTest" time="0.0"/>
+  <testcase name="shouldCreateStreamIfThereIsNoStream" classname="org.eventstore.providers.InMemoryProviderTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

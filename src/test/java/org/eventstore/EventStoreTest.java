@@ -1,9 +1,11 @@
 package org.eventstore;
 
-import org.eventstore.models.EventStream;
+import org.eventstore.models.Event;
 import org.eventstore.providers.InMemoryProvider;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -24,11 +26,5 @@ public class EventStoreTest {
         EventStream ordersStream = eventStore.getEventStream(aggregate, streamId);
         assertThat(ordersStream.getStreamId(), is(streamId));
         assertThat(ordersStream.getAggregate(), is(aggregate));
-    }
-
-    public void shouldAddAnEventToTheEventSream(){
-        String streamId = "1";
-        String aggregate = "orders";
-        EventStream ordersStream = eventStore.getEventStream(aggregate, streamId);
     }
 }

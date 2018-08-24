@@ -2,17 +2,40 @@ package org.eventstore.providers;
 
 import org.eventstore.models.Event;
 
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class InMemoryProvider implements Provider{
 
+    private ConcurrentHashMap<String, ConcurrentHashMap<String, List<Event>>> store = new ConcurrentHashMap<>();
+    private static Lock writeLock = new ReentrantLock();
+
     @Override
-    public List addEvent(String streamId, Event event, String aggregation) {
+    public Event addEvent(String aggregate, String streamId, Event event){
+        List<Event> currentEvents = getEvents(aggregate, streamId);
+        event.setCommitTimestamp(System.currentTimeMillis());
+
+        if (addEvent(event, currentEvents)) {
+            return event;
+        }
         return null;
     }
 
     @Override
-    public List getEventStream(String streamId) {
-        return null;
+    public List<Event> getEvents(String aggregate, String streamId){
+        ConcurrentHashMap<String, List<Event>> aggregateStreams = store.computeIfAbsent(aggregate, key -> new ConcurrentHashMap<>());
+        return aggregateStreams.computeIfAbsent(streamId, key -> Collections.synchronizedList(new ArrayList<>()));
+    }
+
+    private boolean addEvent(Event event, List<Event> currentEvents) {
+        writeLock.lock();
+        try {
+            event.setSequence(currentEvents.size());
+            return currentEvents.add(event);
+        } finally {
+             writeLock.unlock();
+        }
     }
 }
