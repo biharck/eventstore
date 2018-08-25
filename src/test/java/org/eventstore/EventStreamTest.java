@@ -51,8 +51,8 @@ public class EventStreamTest {
     @Test
     public void shouldListenToEventsInTheEventStream() {
 
-        eventStore.subscribe(ordersStream.getAggregate(), message -> {
-            assertThat(message.getAggregate(), is(ordersStream.getAggregate()));
+        eventStore.subscribe(ordersStream.getAggregation(), message -> {
+            assertThat(message.getAggregate(), is(ordersStream.getAggregation()));
             assertThat(message.getStreamId(), is(ordersStream.getStreamId()));
             assertThat(message.getEvent().getPayload(), is(EVENT_PAYLOAD));
         });
@@ -63,7 +63,7 @@ public class EventStreamTest {
     @Test
     public void shouldUnsubscribeToTheEventStream() {
         count = 0;
-        Subscription subscription = eventStore.subscribe(ordersStream.getAggregate(), message -> {
+        Subscription subscription = eventStore.subscribe(ordersStream.getAggregation(), message -> {
             count++;
         });
 

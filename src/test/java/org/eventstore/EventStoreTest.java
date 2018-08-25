@@ -22,6 +22,6 @@ public class EventStoreTest {
         String aggregate = "orders";
         EventStream ordersStream = eventStore.getEventStream(aggregate, streamId);
         assertThat(ordersStream.getStreamId(), is(streamId));
-        assertThat(ordersStream.getAggregate(), is(aggregate));
+        assertThat(ordersStream.getAggregation(), is(aggregate));
     }
 }

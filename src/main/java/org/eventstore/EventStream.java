@@ -6,36 +6,56 @@ import org.eventstore.providers.Provider;
 
 import java.util.List;
 
+/**
+ * An Event Stream
+ */
 public class EventStream  {
 
     private String streamId;
-    private String aggregate;
+    private String aggregation;
     private EventStore eventStore;
 
-    EventStream(EventStore eventStore, String aggregate, String streamId){
+    EventStream(EventStore eventStore, String aggregation, String streamId){
         this.eventStore = eventStore;
-        this.aggregate = aggregate;
+        this.aggregation = aggregation;
         this.streamId = streamId;
     }
 
+    /**
+     * Rertieve a list containing all the events in the stream in order.
+     * @return All the events
+     */
     public List<Event> getEvents(){
 
-        return getProvider().getEvents(aggregate, streamId);
+        return getProvider().getEvents(aggregation, streamId);
     }
 
+    /**
+     * Add a new event to the end of the event stream.
+     * @param event The event
+     * @return The event, updated with informations like its sequence order and commitTimestamp
+     */
     public Event addEvent(Event event){
-        Event addedEvent = getProvider().addEvent(aggregate, streamId, event);
+        Event addedEvent = getProvider().addEvent(aggregation, streamId, event);
         if (eventStore.getPublisher() != null) {
-            Message message = new Message().setAggregate(aggregate).setStreamId(streamId).setEvent(event);
+            Message message = new Message().setAggregate(aggregation).setStreamId(streamId).setEvent(event);
             eventStore.getPublisher().publish(message);
         }
         return addedEvent;
     }
 
-    public String getAggregate() {
-        return aggregate;
+    /**
+     * Retrieve the parent aggregation for this event stream
+     * @return The parent aggregation
+     */
+    public String getAggregation() {
+        return aggregation;
     }
 
+    /**
+     * Retrieve the event stream identifier
+     * @return The event stream identifier
+     */
     public String getStreamId() {
         return streamId;
     }
