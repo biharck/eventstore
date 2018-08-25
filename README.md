@@ -4,7 +4,7 @@
 
 ## Usage
 
-Create the EventStore:
+### Create the EventStore:
 
 ```java
 EventStore eventStore = new EventStoreBuilder()
@@ -12,6 +12,8 @@ EventStore eventStore = new EventStoreBuilder()
                  .setPublisher(new InMemoryPublisher()) // Opcional. Support different publishers, like RabbitmqPublisher, RedisPublisher etc
                  .createEventStore();
 ```
+
+### Reading and writing events:
 
 Accessing an event stream:
 
@@ -33,6 +35,8 @@ EventStream ordersStream = eventStore.getEventStream("orders", "1234567");
 List<Event> events = ordersStream.getEvents();
 Order order = ordersAggregation.loadFromHistory(events)
 ```
+
+### Reacting to events:
 
 Listening for new events in event streams:
 
