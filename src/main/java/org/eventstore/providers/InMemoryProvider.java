@@ -7,6 +7,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * A Persistence Provider that handle all the data in memory. It is a very simple implementation that should be used
+ * only for development and test purposes.
+ */
 public class InMemoryProvider implements Provider{
 
     private ConcurrentHashMap<String, ConcurrentHashMap<String, List<Event>>> store = new ConcurrentHashMap<>();
