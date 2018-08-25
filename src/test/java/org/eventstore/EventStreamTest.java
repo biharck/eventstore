@@ -1,5 +1,6 @@
 package org.eventstore;
 
+import org.eventstore.message.InMemoryPublisher;
 import org.eventstore.models.Event;
 import org.eventstore.providers.InMemoryProvider;
 import org.junit.Before;
@@ -21,7 +22,10 @@ public class EventStreamTest {
     public void setUp(){
         String streamId = "1";
         String aggregate = "orders";
-        eventStore = new EventStore(new InMemoryProvider());
+        eventStore = new EventStoreBuilder()
+                .setProvider(new InMemoryProvider())
+                .setPublisher(new InMemoryPublisher())
+                .createEventStore();;
         ordersStream = eventStore.getEventStream(aggregate, streamId);
     }
 
@@ -40,5 +44,16 @@ public class EventStreamTest {
         assertThat(events.size(), is(1));
         assertThat(events.get(0).getPayload(), is(EVENT_PAYLOAD));
         assertThat(events.get(0).getSequence(), is(0l));
+    }
+
+    @Test
+    public void shouldListenToEventsInTheEventStream() {
+        eventStore.subscribe(ordersStream.getAggregate(), message -> {
+            assertThat(message.getAggregate(), is(ordersStream.getAggregate()));
+            assertThat(message.getStreamId(), is(ordersStream.getStreamId()));
+            assertThat(message.getEvent().getPayload(), is(EVENT_PAYLOAD));
+        });
+
+        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
     }
 }

@@ -1,11 +1,8 @@
 package org.eventstore;
 
-import org.eventstore.models.Event;
 import org.eventstore.providers.InMemoryProvider;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -16,7 +13,7 @@ public class EventStoreTest {
 
     @Before
     public void setUp(){
-        eventStore = new EventStore(new InMemoryProvider());
+        eventStore = new EventStoreBuilder().setProvider(new InMemoryProvider()).createEventStore();
     }
 
     @Test
