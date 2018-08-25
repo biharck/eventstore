@@ -38,7 +38,7 @@ public class EventStream  {
     public Event addEvent(Event event){
         Event addedEvent = getProvider().addEvent(aggregation, streamId, event);
         if (eventStore.getPublisher() != null) {
-            Message message = new Message().setAggregation(aggregation).setStreamId(streamId).setEvent(event);
+            Message message = new Message().setAggregation(aggregation).setStreamId(streamId).setEvent(addedEvent);
             eventStore.getPublisher().publish(message);
         }
         return addedEvent;
