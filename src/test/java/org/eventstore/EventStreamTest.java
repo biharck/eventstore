@@ -52,7 +52,7 @@ public class EventStreamTest {
     public void shouldListenToEventsInTheEventStream() {
 
         eventStore.subscribe(ordersStream.getAggregation(), message -> {
-            assertThat(message.getAggregate(), is(ordersStream.getAggregation()));
+            assertThat(message.getAggregation(), is(ordersStream.getAggregation()));
             assertThat(message.getStreamId(), is(ordersStream.getStreamId()));
             assertThat(message.getEvent().getPayload(), is(EVENT_PAYLOAD));
         });
