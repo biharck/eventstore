@@ -38,7 +38,7 @@ Listening for new events in event streams:
 
 ```java
 eventStore.subscribe("orders", message -> {
-    System.out.println(message.getAggregate());
+    System.out.println(message.getAggregation());
     System.out.println(message.getStreamId());
     System.out.println(getEvent().getPayload());
 });
@@ -48,7 +48,7 @@ Removing the subscription to eventStore channels:
 
 ```java
 Subscription subscription = eventStore.subscribe("orders", message -> {
-    System.out.println(message.getAggregate());
+    System.out.println(message.getAggregation());
     System.out.println(message.getStreamId());
     System.out.println(getEvent().getPayload());
 });
