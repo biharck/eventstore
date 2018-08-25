@@ -1,4 +1,5 @@
 language: java
+install: gradle wrapper --gradle-version 4.8
 sudo: false # faster builds
 
 jdk:
