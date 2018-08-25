@@ -20,9 +20,7 @@ public class Message {
         return this;
     }
 
-    public Event getEvent() {
-        return event;
-    }
+    public Event getEvent() { return event; }
 
     public String getAggregate() {
         return aggregate;
