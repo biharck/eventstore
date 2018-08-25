@@ -1,6 +1,7 @@
 package org.eventstore;
 
 import org.eventstore.message.InMemoryPublisher;
+import org.eventstore.message.Subscription;
 import org.eventstore.models.Event;
 import org.eventstore.providers.InMemoryProvider;
 import org.junit.Before;
@@ -17,6 +18,7 @@ public class EventStreamTest {
     private final String EVENT_PAYLOAD = "Event Data";
     private EventStore eventStore;
     private EventStream ordersStream;
+    private int count = 0;
 
     @Before
     public void setUp(){
@@ -39,7 +41,7 @@ public class EventStreamTest {
 
     @Test
     public void shouldGetEventsFromTheEventStream(){
-        Event event = ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
         List<Event> events = ordersStream.getEvents();
         assertThat(events.size(), is(1));
         assertThat(events.get(0).getPayload(), is(EVENT_PAYLOAD));
@@ -48,6 +50,7 @@ public class EventStreamTest {
 
     @Test
     public void shouldListenToEventsInTheEventStream() {
+
         eventStore.subscribe(ordersStream.getAggregate(), message -> {
             assertThat(message.getAggregate(), is(ordersStream.getAggregate()));
             assertThat(message.getStreamId(), is(ordersStream.getStreamId()));
@@ -55,5 +58,19 @@ public class EventStreamTest {
         });
 
         ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+    }
+
+    @Test
+    public void shouldUnsubscribeToTheEventStream() {
+        count = 0;
+        Subscription subscription = eventStore.subscribe(ordersStream.getAggregate(), message -> {
+            count++;
+        });
+
+        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        assertThat(count, is(1));
+        subscription.remove();;
+        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        assertThat(count, is(1));
     }
 }
