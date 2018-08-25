@@ -19,9 +19,9 @@ public class EventStoreTest {
     @Test
     public void shouldCreateAnEventStreamWhenThereIsNoEventStream(){
         String streamId = "1";
-        String aggregate = "orders";
-        EventStream ordersStream = eventStore.getEventStream(aggregate, streamId);
+        String aggregation = "orders";
+        EventStream ordersStream = eventStore.getEventStream(aggregation, streamId);
         assertThat(ordersStream.getStreamId(), is(streamId));
-        assertThat(ordersStream.getAggregation(), is(aggregate));
+        assertThat(ordersStream.getAggregation(), is(aggregation));
     }
 }

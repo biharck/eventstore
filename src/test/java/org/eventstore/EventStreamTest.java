@@ -23,12 +23,12 @@ public class EventStreamTest {
     @Before
     public void setUp(){
         String streamId = "1";
-        String aggregate = "orders";
+        String aggregation = "orders";
         eventStore = new EventStoreBuilder()
                 .setProvider(new InMemoryProvider())
                 .setPublisher(new InMemoryPublisher())
                 .createEventStore();;
-        ordersStream = eventStore.getEventStream(aggregate, streamId);
+        ordersStream = eventStore.getEventStream(aggregation, streamId);
     }
 
     @Test
