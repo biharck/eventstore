@@ -18,3 +18,18 @@ Accessing an event stream:
 ```java
 EventStream ordersStream = eventStore.getEventStream("orders", "1234567");
 ```
+
+Adding events to the stream:
+
+```java
+EventStream ordersStream = eventStore.getEventStream("orders", "1234567");
+ordersStream.addEvent(new Event("My Event Payload")); // Could pass a JSON string here
+```
+
+Loadinf events from the stream:
+
+```java
+EventStream ordersStream = eventStore.getEventStream("orders", "1234567");
+List<Event> events = ordersStream.getEvents();
+Order order = ordersAggregation.loadFromHistory(events)
+```
