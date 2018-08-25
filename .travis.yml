@@ -3,3 +3,7 @@ sudo: false # faster builds
 
 jdk:
   - oraclejdk8
+
+script:
+  - ./gradlew clean build
+  - ./gradlew pitest
