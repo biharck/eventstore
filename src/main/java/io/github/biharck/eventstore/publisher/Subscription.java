@@ -1,7 +1,9 @@
-package org.eventstore.publisher;
+package io.github.biharck.eventstore.publisher;
+
+import io.github.biharck.eventstore.EventStore;
 
 /**
- * A subscription in the {@link org.eventstore.EventStore} notification channel.
+ * A subscription in the {@link EventStore} notification channel.
  * Can be used to remove the subscription to the publisher channel
  */
 public interface Subscription {

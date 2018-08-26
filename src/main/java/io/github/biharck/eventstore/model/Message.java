@@ -1,8 +1,13 @@
-package org.eventstore.model;
+package io.github.biharck.eventstore.model;
+
+import io.github.biharck.eventstore.EventStore;
+import io.github.biharck.eventstore.EventStream;
+import io.github.biharck.eventstore.publisher.Publisher;
+import io.github.biharck.eventstore.publisher.Subscriber;
 
 /**
- * A Meesage sent by a {@link org.eventstore.publisher.Publisher} to inform {@link org.eventstore.publisher.Subscriber}s
- * that new {@link Event}s was added to the {@link org.eventstore.EventStore}
+ * A Meesage sent by a {@link Publisher} to inform {@link Subscriber}s
+ * that new {@link Event}s was added to the {@link EventStore}
  */
 public class Message {
     private String aggregation;
@@ -20,8 +25,8 @@ public class Message {
     }
 
     /**
-     * Inform the {@link org.eventstore.EventStream} identifier
-     * @param streamId The {@link org.eventstore.EventStream} identifier
+     * Inform the {@link EventStream} identifier
+     * @param streamId The {@link EventStream} identifier
      * @return The Message instance
      */
     public Message setStreamId(String streamId) {
@@ -54,7 +59,7 @@ public class Message {
     }
 
     /**
-     * Retrieve the {@link org.eventstore.EventStream} identifier
+     * Retrieve the {@link EventStream} identifier
      * @return The stream identifier
      */
     public String getStreamId() {

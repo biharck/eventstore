@@ -1,4 +1,4 @@
-package org.eventstore.provider;
+package io.github.biharck.eventstore.provider;
 
 import static org.junit.Assert.assertThat;
 import org.junit.Test;

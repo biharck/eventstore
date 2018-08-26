@@ -1,11 +1,11 @@
-package org.eventstore.publisher;
+package io.github.biharck.eventstore.publisher;
 
 import com.google.gson.Gson;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.pubsub.RedisPubSubListener;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import io.lettuce.core.pubsub.api.async.RedisPubSubAsyncCommands;
-import org.eventstore.model.Message;
+import io.github.biharck.eventstore.model.Message;
 
 import java.util.ArrayList;
 import java.util.Collections;

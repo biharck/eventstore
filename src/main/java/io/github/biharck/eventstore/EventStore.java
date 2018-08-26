@@ -1,10 +1,10 @@
-package org.eventstore;
+package io.github.biharck.eventstore;
 
-import org.eventstore.publisher.HasSubscribers;
-import org.eventstore.publisher.Subscriber;
-import org.eventstore.publisher.Subscription;
-import org.eventstore.provider.Provider;
-import org.eventstore.publisher.Publisher;
+import io.github.biharck.eventstore.provider.Provider;
+import io.github.biharck.eventstore.publisher.HasSubscribers;
+import io.github.biharck.eventstore.publisher.Publisher;
+import io.github.biharck.eventstore.publisher.Subscription;
+import io.github.biharck.eventstore.publisher.Subscriber;
 
 /**
  * The EventStore itself. To create EventStore instances, use the {@link EventStoreBuilder}

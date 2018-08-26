@@ -1,9 +1,8 @@
-package org.eventstore;
+package io.github.biharck.eventstore;
 
-import org.eventstore.publisher.InMemoryPublisher;
-import org.eventstore.publisher.Subscription;
-import org.eventstore.model.Event;
-import org.eventstore.provider.InMemoryProvider;
+import io.github.biharck.eventstore.publisher.InMemoryPublisher;
+import io.github.biharck.eventstore.model.Event;
+import io.github.biharck.eventstore.provider.InMemoryProvider;
 import org.junit.Before;
 import org.junit.Test;
 

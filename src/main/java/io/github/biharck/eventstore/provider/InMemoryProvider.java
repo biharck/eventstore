@@ -1,6 +1,6 @@
-package org.eventstore.provider;
+package io.github.biharck.eventstore.provider;
 
-import org.eventstore.model.Event;
+import io.github.biharck.eventstore.model.Event;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

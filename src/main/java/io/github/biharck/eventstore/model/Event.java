@@ -1,4 +1,6 @@
-package org.eventstore.model;
+package io.github.biharck.eventstore.model;
+
+import io.github.biharck.eventstore.EventStream;
 
 /**
  * An Event in the stream of events
@@ -38,7 +40,7 @@ public class Event {
     public void setPayload(String payload) { this.payload = payload; }
 
     /**
-     * Retrieve the sequence order for the event in the {@link org.eventstore.EventStream}
+     * Retrieve the sequence order for the event in the {@link EventStream}
      * @return The order of the event in the stream
      */
     public long getSequence() {
@@ -46,7 +48,7 @@ public class Event {
     }
 
     /**
-     * Inform the sequence order for the event in the {@link org.eventstore.EventStream}
+     * Inform the sequence order for the event in the {@link EventStream}
      * @param sequence The order of the event in the stream
      */
     public void setSequence(long sequence){
@@ -54,7 +56,7 @@ public class Event {
     }
 
     /**
-     * Retrieve the time where the event was persisted in the {@link org.eventstore.EventStream}
+     * Retrieve the time where the event was persisted in the {@link EventStream}
      * @return When the event was persisted in the stream
      */
     public long getCommitTimestamp() {
@@ -62,7 +64,7 @@ public class Event {
     }
 
     /**
-     * Inform the time where the event was persisted in the {@link org.eventstore.EventStream}
+     * Inform the time where the event was persisted in the {@link EventStream}
      * @param commitTimestamp When the event was persisted in the stream
      */
     public void setCommitTimestamp(long commitTimestamp) {
