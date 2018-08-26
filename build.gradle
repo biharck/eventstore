@@ -37,7 +37,7 @@ test {
 }
 
 pitest {
-    targetClasses = ['org.eventstore.*']
+    targetClasses = ['com.biharck.eventstore.*']
     threads = 4
     outputFormats = ['XML', 'HTML']
     coverageThreshold = 95
