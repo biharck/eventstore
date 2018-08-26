@@ -31,7 +31,7 @@ public class EventStoreBuilder {
      * @param publisher Handle the Message notifications
      * @return The Builder instance
      */
-    public EventStoreBuilder setPublisherStrategy(Publisher publisher) {
+    public EventStoreBuilder setPublisher(Publisher publisher) {
         this.publisher = publisher;
         return this;
     }

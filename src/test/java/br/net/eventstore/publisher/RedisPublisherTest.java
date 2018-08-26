@@ -27,7 +27,7 @@ public class RedisPublisherTest {
         String aggregation = "orders";
         eventStore = new EventStoreBuilder()
                 .setProvider(new InMemoryProvider())
-                .setPublisherStrategy(new RedisPublisher("redis://localhost:6379/6"))
+                .setPublisher(new RedisPublisher("redis://localhost:6379/6"))
                 .createEventStore();
         ordersStream = eventStore.getEventStream(aggregation, streamId);
     }
@@ -37,7 +37,7 @@ public class RedisPublisherTest {
 
         EventStore eventStoreNotified = new EventStoreBuilder()
                 .setProvider(new InMemoryProvider())
-                .setPublisherStrategy(new RedisPublisher("redis://localhost:6379/6"))
+                .setPublisher(new RedisPublisher("redis://localhost:6379/6"))
                 .createEventStore();
         count = 0;
         eventStoreNotified.subscribe(ordersStream.getAggregation(), message -> {
@@ -55,7 +55,7 @@ public class RedisPublisherTest {
     public void shouldUnsubscribeToTheEventStream() {
         EventStore eventStoreNotified = new EventStoreBuilder()
                 .setProvider(new InMemoryProvider())
-                .setPublisherStrategy(new RedisPublisher("redis://localhost:6379/6"))
+                .setPublisher(new RedisPublisher("redis://localhost:6379/6"))
                 .createEventStore();
         count = 0;
         Subscription subscription = eventStoreNotified.subscribe(ordersStream.getAggregation(), message -> {

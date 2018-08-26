@@ -27,7 +27,7 @@ public class RabbitMQPublisherTest {
         String aggregation = "orders";
         eventStore = new EventStoreBuilder()
                 .setProvider(new InMemoryProvider())
-                .setPublisherStrategy(new RabbitMQPublisher("localhost"))
+                .setPublisher(new RabbitMQPublisher("localhost"))
                 .createEventStore();
         ordersStream = eventStore.getEventStream(aggregation, streamId);
     }
@@ -38,7 +38,7 @@ public class RabbitMQPublisherTest {
 
         EventStore eventStoreNotified = new EventStoreBuilder()
                 .setProvider(new InMemoryProvider())
-                .setPublisherStrategy(new RabbitMQPublisher("localhost"))
+                .setPublisher(new RabbitMQPublisher("localhost"))
                 .createEventStore();
         count = 0;
         eventStoreNotified.subscribe(ordersStream.getAggregation(), message -> {

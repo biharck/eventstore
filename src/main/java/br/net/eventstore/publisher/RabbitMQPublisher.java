@@ -1,7 +1,7 @@
 package br.net.eventstore.publisher;
 
-import br.net.eventstore.model.Event;
 import br.net.eventstore.model.Message;
+import com.google.gson.Gson;
 import com.rabbitmq.client.*;
 
 import java.io.IOException;
@@ -11,9 +11,11 @@ public class RabbitMQPublisher implements Publisher, HasSubscribers {
 
     private ConnectionFactory factory = new ConnectionFactory();
     private final String EXCHANGE_NAME = "EVENT_STORE";
+    private Gson serializer;
 
     public RabbitMQPublisher(String rabbitURL){
-        this.factory.setHost(rabbitURL);
+        factory.setHost(rabbitURL);
+        serializer = new Gson();
     }
 
     @Override
@@ -58,7 +60,7 @@ public class RabbitMQPublisher implements Publisher, HasSubscribers {
 
             channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
 
-            channel.basicPublish(EXCHANGE_NAME, message.getAggregation(), null, message.getEvent().getPayload().getBytes());
+            channel.basicPublish(EXCHANGE_NAME, message.getAggregation(), null, serializer.toJson(message.getEvent().getPayload()).getBytes());
             channel.close();
             connection.close();
         }catch (IOException | TimeoutException e){
