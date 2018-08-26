@@ -1,9 +1,9 @@
 package org.eventstore;
 
-import org.eventstore.message.InMemoryPublisher;
-import org.eventstore.message.Subscription;
-import org.eventstore.models.Event;
-import org.eventstore.providers.InMemoryProvider;
+import org.eventstore.publisher.InMemoryPublisher;
+import org.eventstore.publisher.Subscription;
+import org.eventstore.model.Event;
+import org.eventstore.provider.InMemoryProvider;
 import org.junit.Before;
 import org.junit.Test;
 

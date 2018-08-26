@@ -1,4 +1,4 @@
-package org.eventstore.providers;
+package org.eventstore.provider;
 
 import static org.junit.Assert.assertThat;
 import org.junit.Test;

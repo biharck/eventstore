@@ -1,6 +1,6 @@
 package org.eventstore;
 
-import org.eventstore.providers.InMemoryProvider;
+import org.eventstore.provider.InMemoryProvider;
 import org.junit.Before;
 import org.junit.Test;
 

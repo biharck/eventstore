@@ -1,8 +1,8 @@
 package org.eventstore;
 
-import org.eventstore.models.Event;
-import org.eventstore.models.Message;
-import org.eventstore.providers.Provider;
+import org.eventstore.model.Event;
+import org.eventstore.model.Message;
+import org.eventstore.provider.Provider;
 
 import java.util.List;
 

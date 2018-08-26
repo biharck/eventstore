@@ -1,10 +1,10 @@
 package org.eventstore;
 
-import org.eventstore.message.HasSubscribers;
-import org.eventstore.message.Subscriber;
-import org.eventstore.message.Subscription;
-import org.eventstore.providers.Provider;
-import org.eventstore.message.Publisher;
+import org.eventstore.publisher.HasSubscribers;
+import org.eventstore.publisher.Subscriber;
+import org.eventstore.publisher.Subscription;
+import org.eventstore.provider.Provider;
+import org.eventstore.publisher.Publisher;
 
 /**
  * The EventStore itself. To create EventStore instances, use the {@link EventStoreBuilder}
@@ -35,7 +35,7 @@ public class EventStore implements HasSubscribers {
      * It is necessary to have a valid {@link Publisher} configured that supports subscriptions.
      * @param aggregation The aggregation for the stream events
      * @param subscriber Declares the function to be called to handle new messages
-     * @return A subscription. Can be used to remove the subscription to the message channel.
+     * @return A subscription. Can be used to remove the subscription to the publisher channel.
      */
     @Override
     public Subscription subscribe(String aggregation, Subscriber subscriber) {

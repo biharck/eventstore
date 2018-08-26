@@ -1,4 +1,4 @@
-package org.eventstore.models;
+package org.eventstore.model;
 
 /**
  * An Event in the stream of events

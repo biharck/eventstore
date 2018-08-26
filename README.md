@@ -8,7 +8,7 @@
 
 ```java
 EventStore eventStore = new EventStoreBuilder()
-                 .setProvider(new InMemoryProvider()) // Could use different providers, like MongoDBProvider, MySQLProvider etc
+                 .setProvider(new InMemoryProvider()) provider
                  .setPublisher(new InMemoryPublisher()) // Opcional. Support different publishers, like RabbitmqPublisher, RedisPublisher etc
                  .createEventStore();
 ```

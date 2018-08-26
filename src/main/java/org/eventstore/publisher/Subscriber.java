@@ -1,9 +1,9 @@
-package org.eventstore.message;
+package org.eventstore.publisher;
 
-import org.eventstore.models.Message;
+import org.eventstore.model.Message;
 
 /**
- * A Handler for {@link Message}s published by {@link Publisher}s affter {@link org.eventstore.models.Event}s are added
+ * A Handler for {@link Message}s published by {@link Publisher}s affter {@link org.eventstore.model.Event}s are added
  * to {@link org.eventstore.EventStream}
  */
 public interface Subscriber {

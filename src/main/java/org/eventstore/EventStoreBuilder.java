@@ -1,7 +1,7 @@
 package org.eventstore;
 
-import org.eventstore.message.Publisher;
-import org.eventstore.providers.Provider;
+import org.eventstore.publisher.Publisher;
+import org.eventstore.provider.Provider;
 
 /**
  * Builder class for {@link EventStore} instances
@@ -22,8 +22,8 @@ public class EventStoreBuilder {
 
     /**
      * Inform a {@link Publisher} to be used to publish notifications about the modifications in a event stream.
-     * If a Publisher is configured, a {@link org.eventstore.models.Message} will be sent to all
-     * {@link org.eventstore.message.Subscriber}s every time an {@link org.eventstore.models.Event} is added to the
+     * If a Publisher is configured, a {@link org.eventstore.model.Message} will be sent to all
+     * {@link org.eventstore.publisher.Subscriber}s every time an {@link org.eventstore.model.Event} is added to the
      * {@link EventStream}
      * @param publisher Handle the Message notifications
      * @return The Builder instance

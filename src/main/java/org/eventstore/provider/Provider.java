@@ -1,6 +1,6 @@
-package org.eventstore.providers;
+package org.eventstore.provider;
 
-import org.eventstore.models.Event;
+import org.eventstore.model.Event;
 
 import java.util.List;
 

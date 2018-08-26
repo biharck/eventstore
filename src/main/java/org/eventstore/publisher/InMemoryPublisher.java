@@ -1,6 +1,6 @@
-package org.eventstore.message;
+package org.eventstore.publisher;
 
-import org.eventstore.models.Message;
+import org.eventstore.model.Message;
 
 import java.util.ArrayList;
 import java.util.Collections;

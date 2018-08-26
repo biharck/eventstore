@@ -1,7 +1,7 @@
-package org.eventstore.models;
+package org.eventstore.model;
 
 /**
- * A Meesage sent by a {@link org.eventstore.message.Publisher} to inform {@link org.eventstore.message.Subscriber}s
+ * A Meesage sent by a {@link org.eventstore.publisher.Publisher} to inform {@link org.eventstore.publisher.Subscriber}s
  * that new {@link Event}s was added to the {@link org.eventstore.EventStore}
  */
 public class Message {
