@@ -1,4 +1,4 @@
-package io.github.biharck.eventstore.publisher;
+package com.biharck.eventstore.publisher;
 
 /**
  * A class that can receive subscriptions for a notification channel

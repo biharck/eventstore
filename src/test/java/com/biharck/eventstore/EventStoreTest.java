@@ -1,6 +1,6 @@
-package io.github.biharck.eventstore;
+package com.biharck.eventstore;
 
-import io.github.biharck.eventstore.provider.InMemoryProvider;
+import com.biharck.eventstore.provider.InMemoryProvider;
 import org.junit.Before;
 import org.junit.Test;
 

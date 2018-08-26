@@ -1,10 +1,10 @@
-package io.github.biharck.eventstore.publisher;
+package com.biharck.eventstore.publisher;
 
-import io.github.biharck.eventstore.EventStore;
-import io.github.biharck.eventstore.EventStoreBuilder;
-import io.github.biharck.eventstore.EventStream;
-import io.github.biharck.eventstore.model.Event;
-import io.github.biharck.eventstore.provider.InMemoryProvider;
+import com.biharck.eventstore.EventStore;
+import com.biharck.eventstore.EventStoreBuilder;
+import com.biharck.eventstore.EventStream;
+import com.biharck.eventstore.model.Event;
+import com.biharck.eventstore.provider.InMemoryProvider;
 import org.junit.Before;
 import org.junit.Test;
 

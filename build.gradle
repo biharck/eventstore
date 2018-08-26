@@ -15,7 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'jacoco'
 apply plugin: 'info.solidsoft.pitest'
 
-group = 'io.github.biharck.eventstore'
+group = 'com.biharck.eventstore'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 

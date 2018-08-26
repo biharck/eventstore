@@ -1,10 +1,10 @@
-package io.github.biharck.eventstore;
+package com.biharck.eventstore;
 
-import io.github.biharck.eventstore.model.Event;
-import io.github.biharck.eventstore.model.Message;
-import io.github.biharck.eventstore.publisher.Publisher;
-import io.github.biharck.eventstore.publisher.Subscriber;
-import io.github.biharck.eventstore.provider.Provider;
+import com.biharck.eventstore.model.Event;
+import com.biharck.eventstore.model.Message;
+import com.biharck.eventstore.publisher.Publisher;
+import com.biharck.eventstore.publisher.Subscriber;
+import com.biharck.eventstore.provider.Provider;
 
 /**
  * Builder class for {@link EventStore} instances

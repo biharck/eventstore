@@ -1,6 +1,6 @@
-package io.github.biharck.eventstore.model;
+package com.biharck.eventstore.model;
 
-import io.github.biharck.eventstore.EventStream;
+import com.biharck.eventstore.EventStream;
 
 /**
  * An Event in the stream of events

@@ -1,9 +1,9 @@
-package io.github.biharck.eventstore.model;
+package com.biharck.eventstore.model;
 
-import io.github.biharck.eventstore.EventStore;
-import io.github.biharck.eventstore.EventStream;
-import io.github.biharck.eventstore.publisher.Publisher;
-import io.github.biharck.eventstore.publisher.Subscriber;
+import com.biharck.eventstore.publisher.Publisher;
+import com.biharck.eventstore.EventStore;
+import com.biharck.eventstore.EventStream;
+import com.biharck.eventstore.publisher.Subscriber;
 
 /**
  * A Meesage sent by a {@link Publisher} to inform {@link Subscriber}s

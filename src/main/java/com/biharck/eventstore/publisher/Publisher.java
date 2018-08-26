@@ -1,8 +1,8 @@
-package io.github.biharck.eventstore.publisher;
+package com.biharck.eventstore.publisher;
 
-import io.github.biharck.eventstore.EventStream;
-import io.github.biharck.eventstore.model.Event;
-import io.github.biharck.eventstore.model.Message;
+import com.biharck.eventstore.EventStream;
+import com.biharck.eventstore.model.Event;
+import com.biharck.eventstore.model.Message;
 
 /**
  * Publish notifications about the modifications in a event stream.

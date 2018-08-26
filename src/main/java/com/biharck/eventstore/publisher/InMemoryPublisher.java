@@ -1,6 +1,6 @@
-package io.github.biharck.eventstore.publisher;
+package com.biharck.eventstore.publisher;
 
-import io.github.biharck.eventstore.model.Message;
+import com.biharck.eventstore.model.Message;
 
 import java.util.ArrayList;
 import java.util.Collections;

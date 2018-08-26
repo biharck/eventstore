@@ -1,6 +1,6 @@
-package io.github.biharck.eventstore.publisher;
+package com.biharck.eventstore.publisher;
 
-import io.github.biharck.eventstore.EventStore;
+import com.biharck.eventstore.EventStore;
 
 /**
  * A subscription in the {@link EventStore} notification channel.

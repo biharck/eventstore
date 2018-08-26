@@ -1,8 +1,8 @@
-package io.github.biharck.eventstore;
+package com.biharck.eventstore;
 
-import io.github.biharck.eventstore.model.Event;
-import io.github.biharck.eventstore.model.Message;
-import io.github.biharck.eventstore.provider.Provider;
+import com.biharck.eventstore.model.Event;
+import com.biharck.eventstore.model.Message;
+import com.biharck.eventstore.provider.Provider;
 
 import java.util.List;
 
