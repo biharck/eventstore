@@ -47,30 +47,4 @@ public class EventStreamTest {
         assertThat(events.get(0).getPayload(), is(EVENT_PAYLOAD));
         assertThat(events.get(0).getSequence(), is(0l));
     }
-
-    @Test
-    public void shouldListenToEventsInTheEventStream() {
-
-        eventStore.subscribe(ordersStream.getAggregation(), message -> {
-            assertThat(message.getAggregation(), is(ordersStream.getAggregation()));
-            assertThat(message.getStreamId(), is(ordersStream.getStreamId()));
-            assertThat(message.getEvent().getPayload(), is(EVENT_PAYLOAD));
-        });
-
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
-    }
-
-    @Test
-    public void shouldUnsubscribeToTheEventStream() {
-        count = 0;
-        Subscription subscription = eventStore.subscribe(ordersStream.getAggregation(), message -> {
-            count++;
-        });
-
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
-        assertThat(count, is(1));
-        subscription.remove();;
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
-        assertThat(count, is(1));
-    }
 }

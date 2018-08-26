@@ -10,11 +10,17 @@ public class Event {
     private long sequence;
 
     /**
+     * Default Constructor
+     */
+    public Event() { }
+
+    /**
      * Create a new Event with the given payload
      * @param payload Any data associated
      */
     public Event(String payload) {
-        this.payload = payload;
+        this();
+        setPayload(payload);
     }
 
     /**
@@ -24,6 +30,12 @@ public class Event {
     public String getPayload() {
         return payload;
     }
+
+    /**
+     * Inform the event payload. The payload can be any data associated with the event
+     * @param payload The event payload
+     */
+    public void setPayload(String payload) { this.payload = payload; }
 
     /**
      * Retrieve the sequence order for the event in the {@link org.eventstore.EventStream}
