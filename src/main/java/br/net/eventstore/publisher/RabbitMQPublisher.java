@@ -1,9 +1,8 @@
 package br.net.eventstore.publisher;
 
+import br.net.eventstore.model.Event;
 import br.net.eventstore.model.Message;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.*;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -11,6 +10,7 @@ import java.util.concurrent.TimeoutException;
 public class RabbitMQPublisher implements Publisher, HasSubscribers {
 
     private ConnectionFactory factory = new ConnectionFactory();
+    private final String EXCHANGE_NAME = "EVENT_STORE";
 
     public RabbitMQPublisher(String rabbitURL){
         this.factory.setHost(rabbitURL);
@@ -18,6 +18,32 @@ public class RabbitMQPublisher implements Publisher, HasSubscribers {
 
     @Override
     public Subscription subscribe(String aggregation, Subscriber subscriber) {
+        Connection connection = null;
+        Channel channel = null;
+
+        try{
+            connection = factory.newConnection();
+            channel = connection.createChannel();
+
+            String queueName = channel.queueDeclare().getQueue();
+            channel.queueBind(queueName, EXCHANGE_NAME, aggregation);
+
+            System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+
+            Consumer consumer = new DefaultConsumer(channel) {
+                @Override
+                public void handleDelivery(String consumerTag, Envelope envelope,
+                                           AMQP.BasicProperties properties, byte[] body) throws IOException {
+                    String message = new String(body, "UTF-8");
+                    System.out.println(" [x] Received '" + message + "'");
+                }
+            };
+            channel.basicConsume(queueName, true, consumer);
+
+            connection.close();
+        }catch (IOException | TimeoutException e){
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -30,13 +56,15 @@ public class RabbitMQPublisher implements Publisher, HasSubscribers {
             connection = factory.newConnection();
             channel = connection.createChannel();
 
-            channel.exchangeDeclare(message.getStreamId(), "fanout");
+            channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
 
-            channel.basicPublish(message.getStreamId(), message.getAggregation(), null, message.getEvent().getPayload().getBytes());
+            channel.basicPublish(EXCHANGE_NAME, message.getAggregation(), null, message.getEvent().getPayload().getBytes());
+            channel.close();
             connection.close();
         }catch (IOException | TimeoutException e){
             e.printStackTrace();
         }
 
     }
+
 }
