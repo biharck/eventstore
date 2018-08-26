@@ -1,8 +1,8 @@
-package com.biharck.eventstore.provider;
+package br.net.eventstore.provider;
 
-import com.biharck.eventstore.EventStore;
-import com.biharck.eventstore.EventStream;
-import com.biharck.eventstore.model.Event;
+import br.net.eventstore.EventStore;
+import br.net.eventstore.EventStream;
+import br.net.eventstore.model.Event;
 
 import java.util.List;
 

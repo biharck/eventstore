@@ -1,8 +1,8 @@
-package com.biharck.eventstore.publisher;
+package br.net.eventstore.publisher;
 
-import com.biharck.eventstore.EventStream;
-import com.biharck.eventstore.model.Event;
-import com.biharck.eventstore.model.Message;
+import br.net.eventstore.EventStream;
+import br.net.eventstore.model.Event;
+import br.net.eventstore.model.Message;
 
 /**
  * A Handler for {@link Message}s published by {@link Publisher}s affter {@link Event}s are added

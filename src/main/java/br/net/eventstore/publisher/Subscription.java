@@ -1,6 +1,6 @@
-package com.biharck.eventstore.publisher;
+package br.net.eventstore.publisher;
 
-import com.biharck.eventstore.EventStore;
+import br.net.eventstore.EventStore;
 
 /**
  * A subscription in the {@link EventStore} notification channel.

@@ -1,10 +1,10 @@
-package com.biharck.eventstore;
+package br.net.eventstore;
 
-import com.biharck.eventstore.provider.Provider;
-import com.biharck.eventstore.publisher.HasSubscribers;
-import com.biharck.eventstore.publisher.Publisher;
-import com.biharck.eventstore.publisher.Subscription;
-import com.biharck.eventstore.publisher.Subscriber;
+import br.net.eventstore.provider.Provider;
+import br.net.eventstore.publisher.HasSubscribers;
+import br.net.eventstore.publisher.Publisher;
+import br.net.eventstore.publisher.Subscription;
+import br.net.eventstore.publisher.Subscriber;
 
 /**
  * The EventStore itself. To create EventStore instances, use the {@link EventStoreBuilder}

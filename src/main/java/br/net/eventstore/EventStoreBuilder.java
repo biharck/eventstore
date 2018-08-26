@@ -1,10 +1,10 @@
-package com.biharck.eventstore;
+package br.net.eventstore;
 
-import com.biharck.eventstore.model.Event;
-import com.biharck.eventstore.model.Message;
-import com.biharck.eventstore.publisher.Publisher;
-import com.biharck.eventstore.publisher.Subscriber;
-import com.biharck.eventstore.provider.Provider;
+import br.net.eventstore.model.Event;
+import br.net.eventstore.model.Message;
+import br.net.eventstore.publisher.Publisher;
+import br.net.eventstore.publisher.Subscriber;
+import br.net.eventstore.provider.Provider;
 
 /**
  * Builder class for {@link EventStore} instances

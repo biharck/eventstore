@@ -1,4 +1,4 @@
-package com.biharck.eventstore.publisher;
+package br.net.eventstore.publisher;
 
 /**
  * A class that can receive subscriptions for a notification channel

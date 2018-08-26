@@ -1,6 +1,6 @@
-package com.biharck.eventstore.provider;
+package br.net.eventstore.provider;
 
-import com.biharck.eventstore.model.Event;
+import br.net.eventstore.model.Event;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

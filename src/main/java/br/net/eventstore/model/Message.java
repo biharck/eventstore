@@ -1,9 +1,9 @@
-package com.biharck.eventstore.model;
+package br.net.eventstore.model;
 
-import com.biharck.eventstore.publisher.Publisher;
-import com.biharck.eventstore.EventStore;
-import com.biharck.eventstore.EventStream;
-import com.biharck.eventstore.publisher.Subscriber;
+import br.net.eventstore.publisher.Publisher;
+import br.net.eventstore.EventStore;
+import br.net.eventstore.EventStream;
+import br.net.eventstore.publisher.Subscriber;
 
 /**
  * A Meesage sent by a {@link Publisher} to inform {@link Subscriber}s

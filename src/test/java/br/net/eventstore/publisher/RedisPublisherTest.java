@@ -1,10 +1,10 @@
-package com.biharck.eventstore.publisher;
+package br.net.eventstore.publisher;
 
-import com.biharck.eventstore.EventStore;
-import com.biharck.eventstore.EventStoreBuilder;
-import com.biharck.eventstore.EventStream;
-import com.biharck.eventstore.model.Event;
-import com.biharck.eventstore.provider.InMemoryProvider;
+import br.net.eventstore.EventStore;
+import br.net.eventstore.EventStoreBuilder;
+import br.net.eventstore.EventStream;
+import br.net.eventstore.model.Event;
+import br.net.eventstore.provider.InMemoryProvider;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +28,7 @@ public class RedisPublisherTest {
         eventStore = new EventStoreBuilder()
                 .setProvider(new InMemoryProvider())
                 .setPublisherStrategy(new RedisPublisher("redis://localhost:6379/6"))
-                .createEventStore();;
+                .createEventStore();
         ordersStream = eventStore.getEventStream(aggregation, streamId);
     }
 

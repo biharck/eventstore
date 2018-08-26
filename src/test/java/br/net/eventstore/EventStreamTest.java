@@ -1,8 +1,8 @@
-package com.biharck.eventstore;
+package br.net.eventstore;
 
-import com.biharck.eventstore.publisher.InMemoryPublisher;
-import com.biharck.eventstore.model.Event;
-import com.biharck.eventstore.provider.InMemoryProvider;
+import br.net.eventstore.publisher.InMemoryPublisher;
+import br.net.eventstore.model.Event;
+import br.net.eventstore.provider.InMemoryProvider;
 import org.junit.Before;
 import org.junit.Test;
 

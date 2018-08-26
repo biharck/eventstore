@@ -1,6 +1,6 @@
-package com.biharck.eventstore.model;
+package br.net.eventstore.model;
 
-import com.biharck.eventstore.EventStream;
+import br.net.eventstore.EventStream;
 
 /**
  * An Event in the stream of events

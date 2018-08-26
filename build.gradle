@@ -29,6 +29,7 @@ dependencies {
 	testCompile 'junit:junit:4.12'
     testCompile group: 'org.awaitility', name: 'awaitility', version: '3.1.2'
     implementation 'com.google.code.gson:gson:2.8.5'
+    compile 'com.rabbitmq:amqp-client:5.3.0'
 }
 
 test {
@@ -37,7 +38,7 @@ test {
 }
 
 pitest {
-    targetClasses = ['com.biharck.eventstore.*']
+    targetClasses = ['br.net.eventstore.*']
     threads = 4
     outputFormats = ['XML', 'HTML']
     coverageThreshold = 95
