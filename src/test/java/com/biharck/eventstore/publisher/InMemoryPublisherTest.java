@@ -25,7 +25,7 @@ public class InMemoryPublisherTest {
         String aggregation = "orders";
         eventStore = new EventStoreBuilder()
                 .setProvider(new InMemoryProvider())
-                .setPublisher(new InMemoryPublisher())
+                .setPublisherStrategy(new InMemoryPublisher())
                 .createEventStore();;
         ordersStream = eventStore.getEventStream(aggregation, streamId);
     }
