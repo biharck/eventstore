@@ -65,7 +65,7 @@ public class RedisPublisherTest {
         ordersStream.addEvent(new Event(EVENT_PAYLOAD));
 
         await().atMost(1, TimeUnit.SECONDS).until(() -> count == 1);
-        subscription.remove();;
+        subscription.remove();
 
         await().atLeast(500, TimeUnit.MILLISECONDS);
         ordersStream.addEvent(new Event(EVENT_PAYLOAD));
