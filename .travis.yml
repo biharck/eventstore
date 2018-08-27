@@ -3,6 +3,9 @@ install: gradle wrapper --gradle-version 4.8
 sudo: required
 jdk:
   - oraclejdk8
+branches:
+  only:
+  - master
 services:
   - docker
 before_install:
@@ -12,16 +15,3 @@ before_install:
 script:
   - "./gradlew clean build"
   - "./gradlew pitest"
-before_deploy:
-  - mvn help:evaluate -N -Dexpression=project.version|grep -v '\['
-  - export project_version=$(mvn help:evaluate -N -Dexpression=project.version|grep
-  -v '\[')
-deploy:
-  provider: releases
-  api_key:
-    secure: kw78lKojnskUKJhpiTc1rI3lQJdFmKcxg9NpIY5h7CgjSkw/K9muUwzXe3i+XhgqnttHxrz7K7j09uxpvn6RqXAu/lQdHGWYVmUgq8WE769ccvhGBEuJhO6sBybwq3GUVsXytJ71jWKngFQmxvi4vIRd4uRoPGZioSEZxwBIIXntNEXGeemyNTxtQhKRWiLSm+4MAJOnzcomp9IKhRmJyyptjMHuu7sOtCL8auS0J8r2tmjGypou4WVhlrNu3OzU5KYUtRyd8b5zEw4RK6uTWljhxoKJUVQuCOE/tNXtdFR9gPQ9KjNydZzJqp+dj9F7UMF/kdCsDHc9izb0tjV2q3mspEvLPoC/5zC47P75xDEkxGZf11Mo8qlTR5XTJBdppFuX9loxtO9+5W45rok/mgM3Ha0KllOkmysOLqH3QXFqDqVceC+pXSYqpBKDLL68/oLA/+Z8GzuU80SuZLYwQaibWd3nvXcA4+i1RXerD1hiD/rUqGjIbwgbX1sEvKjYPJKD+TYMAh8QIv9dgN5RbejVN/rE5hh6A6tGMLu6eaH9+nE9Oure5JsRjdJGtFLRbd1NlSKy55FHVwYP1CAoVbh/AuhtHp6DWaFa7JjEVp4+J+ITcJE+cXVSWkPvQK82jgMHyM/wG+KOWAggA+Nre+Lx8tfMzbYFdqE3+ZUw4/8=
-  file: build/libs/eventstore-$project_versio.jar
-  skip_cleanup: true
-  on:
-    repo: biharck/eventstore
-  name: $project_version
