@@ -21,10 +21,8 @@ public class InMemoryProvider implements Provider{
         List<Event> currentEvents = getEvents(aggregation, streamId);
         event.setCommitTimestamp(System.currentTimeMillis());
 
-        if (addEvent(event, currentEvents)) {
-            return event;
-        }
-        return null;
+        addEvent(event, currentEvents);
+        return event;
     }
 
     @Override
@@ -33,11 +31,11 @@ public class InMemoryProvider implements Provider{
         return aggregateStreams.computeIfAbsent(streamId, key -> Collections.synchronizedList(new ArrayList<>()));
     }
 
-    private boolean addEvent(Event event, List<Event> currentEvents) {
+    private void addEvent(Event event, List<Event> currentEvents) {
         writeLock.lock();
         try {
             event.setSequence(currentEvents.size());
-            return currentEvents.add(event);
+            currentEvents.add(event);
         } finally {
              writeLock.unlock();
         }

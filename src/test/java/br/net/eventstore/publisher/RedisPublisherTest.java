@@ -5,6 +5,7 @@ import br.net.eventstore.EventStoreBuilder;
 import br.net.eventstore.EventStream;
 import br.net.eventstore.model.Event;
 import br.net.eventstore.provider.InMemoryProvider;
+import io.lettuce.core.RedisClient;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,6 +21,11 @@ public class RedisPublisherTest {
     protected EventStore eventStore;
     protected EventStream ordersStream;
     protected int count = 0;
+
+    public RedisPublisherTest() {
+        RedisClient.create("redis://localhost:6379/6").connect().sync().flushdb();
+    }
+
 
     @Before
     public void setUp(){
