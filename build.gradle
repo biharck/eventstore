@@ -4,9 +4,13 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
 	}
     dependencies{
         classpath("info.solidsoft.gradle.pitest:gradle-pitest-plugin:${pitestPluginVersion}")
+        classpath("net.researchgate:gradle-release:2.7.0")
     }
 }
 
@@ -14,6 +18,8 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'jacoco'
 apply plugin: 'info.solidsoft.pitest'
+apply plugin: "net.researchgate.release"
+
 
 group = 'com.biharck.eventstore'
 version = '0.0.1-SNAPSHOT'
