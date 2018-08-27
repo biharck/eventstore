@@ -9,6 +9,9 @@ import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * A Persistence Provider that handle all the data in redis.
+ */
 public class RedisProvider implements Provider{
 
     private final RedisClient redisClient;

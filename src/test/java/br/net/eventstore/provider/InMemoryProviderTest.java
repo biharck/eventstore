@@ -5,7 +5,6 @@ import br.net.eventstore.EventStoreBuilder;
 import br.net.eventstore.EventStream;
 import br.net.eventstore.publisher.InMemoryPublisher;
 import br.net.eventstore.model.Event;
-import br.net.eventstore.provider.InMemoryProvider;
 import org.junit.Before;
 import org.junit.Test;
 
