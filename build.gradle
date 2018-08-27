@@ -51,17 +51,13 @@ jacocoTestReport {
     }
 }
 
-// add the build script
-buildscript {
-    repositories {
-        maven {
-            url 'https://plugins.gradle.org/m2/'
-        }
+//create a single Jar with all dependencies
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Eventstore',
+                'Implementation-Version': version
     }
-    dependencies {
-        classpath 'net.researchgate:gradle-release:2.6.0'
-    }
+    baseName = project.name
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
-
-//declare the release plugin
-apply plugin: 'net.researchgate.release'
