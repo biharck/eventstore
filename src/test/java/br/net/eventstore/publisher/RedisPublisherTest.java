@@ -54,7 +54,7 @@ public class RedisPublisherTest {
         });
 
         ordersStream.addEvent(new Event(EVENT_PAYLOAD));
-        await().atMost(5, TimeUnit.SECONDS).until(() -> count == 1);
+        await().atMost(10, TimeUnit.SECONDS).until(() -> count == 1);
     }
 
     @Test
@@ -70,12 +70,12 @@ public class RedisPublisherTest {
 
         ordersStream.addEvent(new Event(EVENT_PAYLOAD));
 
-        await().atMost(5, TimeUnit.SECONDS).until(() -> count == 1);
+        await().atMost(10, TimeUnit.SECONDS).until(() -> count == 1);
         subscription.remove();
 
-        await().atLeast(1, TimeUnit.SECONDS);
+        await().atLeast(2, TimeUnit.SECONDS);
         ordersStream.addEvent(new Event(EVENT_PAYLOAD));
-        await().atLeast(1, TimeUnit.SECONDS);
+        await().atLeast(2, TimeUnit.SECONDS);
         assertThat(count, is(1));
     }
 
