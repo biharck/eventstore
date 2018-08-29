@@ -20,6 +20,8 @@ apply plugin: 'eclipse'
 apply plugin: 'jacoco'
 apply plugin: 'info.solidsoft.pitest'
 apply plugin: 'net.researchgate.release'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
 sourceCompatibility = 1.8
 
@@ -54,13 +56,81 @@ jacocoTestReport {
     }
 }
 
-//create a single Jar with all dependencies
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Implementation-Title': 'Eventstore',
-                'Implementation-Version': version
+// Create a jar with javadoc
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+// Create a jar with soruces
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+// hook all the artifacts under artifacts task
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+// Signing task
+signing {
+    sign configurations.archives
+}
+
+def v_ossrhUsername=""
+def v_ossrhPassword=""
+
+if (project.hasProperty("ossrhUsername")) {
+    v_ossrhUsername = ossrhUsername
+}
+if (project.hasProperty("ossrhPassword")) {
+    v_ossrhPassword = ossrhPassword
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: v_ossrhUsername, password: v_ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: v_ossrhUsername, password: v_ossrhPassword)
+            }
+
+            pom.project {
+                name 'event.store'
+                packaging 'jar'
+                artifactId archivesBaseName
+                version version
+                description 'A simple and fast EventStore that support multiple persistence and notification providers'
+                url 'https://www.eventstore.net.br'
+
+                scm {
+                    connection 'scm:git:git://github.com/biharck/eventstore.git'
+                    developerConnection 'scm:git:git@github.com:biharck/eventstore.git'
+                    url 'https://github.com/biharck/eventstore'
+                }
+
+                licenses {
+                    license {
+                        name 'MIT License'
+                        url 'http://www.opensource.org/licenses/mit-license.php'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'biharck'
+                        name 'Biharck Muniz Araujo'
+                        email 'biharck@gmail.com'
+                        url 'https://biharck.github.io'
+                    }
+                }
+            }
+        }
     }
-    baseName = project.name
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
 }
