@@ -8,11 +8,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
+      - image: redis:3.0.7-alpine
 
     working_directory: ~/repo
 
@@ -31,8 +27,9 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: docker run -p 6379:6379 -d --name redis redis:3.0.7-alpine
-      - run: gradle dependencies
+      - run: |
+        docker run -p 6379:6379 -d --name redis redis:3.0.7-alpine
+        gradle dependencies
 
       - save_cache:
           paths:
@@ -40,4 +37,4 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
         
       # run tests!
-      - run: gradle pitest
+      - run: ./gradlew pitest
