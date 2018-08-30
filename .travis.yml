@@ -13,7 +13,7 @@ before_install:
   - chmod +x gradlew
 script:
   - "./gradlew clean build"
-  - "./gradlew pitest"
+  - "./gradlew test"
 after_success:
   - ./deploy.sh
 env:
