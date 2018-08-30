@@ -8,7 +8,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-      - image: redis
+      - image: circleci/redis
 
     working_directory: ~/repo
 
@@ -27,9 +27,8 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: |
-        docker run -p 6379:6379 -d --name redis redis
-        gradle dependencies
+      - run: docker run -p 6379:6379 -d --name redis circleci/redis
+      - run: gradle dependencies
 
       - save_cache:
           paths:
