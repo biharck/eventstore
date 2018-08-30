@@ -39,3 +39,6 @@ jobs:
         
       # run tests!
       - run: gradle pitest
+
+      # run publish
+      - run: ./deploy.sh
