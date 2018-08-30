@@ -1,5 +1,7 @@
 language: java
-install: gradle wrapper --gradle-version 4.8
+install:
+  - gradle wrapper --gradle-version 4.8
+  - ./gradlew assemble -x signArchives
 sudo: required
 jdk:
   - oraclejdk8
@@ -12,6 +14,7 @@ before_install:
   - docker run -p 6379:6379 -d --name redis redis:3.0.7-alpine
   - chmod +x gradlew
 script:
+  - "./gradlew check"
   - "./gradlew clean build"
   - "./gradlew test"
 after_success:
