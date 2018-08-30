@@ -14,6 +14,6 @@ before_install:
   - docker run -p 6379:6379 -d --name redis redis:3.0.7-alpine
   - chmod +x gradlew
 script:
-  - "./gradlew check --debug"
+  - "./gradlew check"
 after_success:
   - "./deploy.sh"
