@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -44,10 +45,54 @@ public class RedisProviderTest {
     public void shouldGetEventsFromTheEventStream(){
         EventStream eventStream = getEventStream("orders", "2");
         eventStream.addEvent(new Event(EVENT_PAYLOAD));
-        List<Event> events = eventStream.getEvents();
+        List<Event> events = eventStream.getEvents().collect(Collectors.toList());
         assertThat(events.size(), is(1));
         assertThat(events.get(0).getPayload(), is(EVENT_PAYLOAD));
         assertThat(events.get(0).getSequence(), is(0l));
+    }
+
+    @Test
+    public void shouldGetRangedEventsFromTheEventStream(){
+        EventStream eventStream = getEventStream("orders", "2");
+        eventStream.addEvent(new Event(EVENT_PAYLOAD));
+        eventStream.addEvent(new Event(EVENT_PAYLOAD + "_1"));
+        eventStream.addEvent(new Event(EVENT_PAYLOAD + "_2"));
+        List<Event> events = eventStream.getEvents(1,5).collect(Collectors.toList());
+        assertThat(events.size(), is(2));
+        assertThat(events.get(0).getPayload(), is(EVENT_PAYLOAD + "_1"));
+        assertThat(events.get(0).getSequence(), is(1l));
+    }
+
+    @Test
+    public void shouldGetAggregationsFromTheEventStream(){
+        EventStream eventStream = getEventStream("orders", "3");
+        eventStream.addEvent(new Event(EVENT_PAYLOAD));
+        List<String> aggregations = eventStore.getAggregations().collect(Collectors.toList());
+        assertThat(aggregations.size(), is(1));
+    }
+
+    @Test
+    public void shouldGetStreamBasedOnAggregation(){
+        EventStream eventStream = getEventStream("orders", "4");
+        eventStream.addEvent(new Event(EVENT_PAYLOAD));
+        List<String> orders = eventStore.getStreams("orders").collect(Collectors.toList());
+        assertThat(orders.size(), is(1));
+    }
+
+    @Test
+    public void shouldGetRangedAggregationsFromTheEventStream(){
+        EventStream eventStream = getEventStream("orders", "5");
+        eventStream.addEvent(new Event(EVENT_PAYLOAD));
+        List<String> aggregations = eventStore.getAggregations(0, 1).collect(Collectors.toList());
+        assertThat(aggregations.size(), is(1));
+    }
+
+    @Test
+    public void shouldGetRangedStreamBasedOnAggregation(){
+        EventStream eventStream = getEventStream("orders", "6");
+        eventStream.addEvent(new Event(EVENT_PAYLOAD));
+        List<String> orders = eventStore.getStreams("orders", 0, 1).collect(Collectors.toList());
+        assertThat(orders.size(), is(1));
     }
 
     protected EventStream getEventStream(String aggregation, String streamId) {

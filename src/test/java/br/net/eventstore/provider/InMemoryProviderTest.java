@@ -9,6 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -28,7 +31,7 @@ public class InMemoryProviderTest {
         eventStore = new EventStoreBuilder()
                 .setProvider(new InMemoryProvider())
                 .setPublisher(new InMemoryPublisher())
-                .createEventStore();;
+                .createEventStore();
         ordersStream = eventStore.getEventStream(aggregation, streamId);
     }
 
@@ -43,9 +46,36 @@ public class InMemoryProviderTest {
     @Test
     public void shouldGetEventsFromTheEventStream(){
         ordersStream.addEvent(new Event(EVENT_PAYLOAD));
-        List<Event> events = ordersStream.getEvents();
+        List<Event> events = ordersStream.getEvents().collect(Collectors.toList());
         assertThat(events.size(), is(1));
         assertThat(events.get(0).getPayload(), is(EVENT_PAYLOAD));
         assertThat(events.get(0).getSequence(), is(0l));
     }
+
+    @Test
+    public void shouldGetRangedEventsFromTheEventStream(){
+        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        ordersStream.addEvent(new Event(EVENT_PAYLOAD + "_1"));
+        ordersStream.addEvent(new Event(EVENT_PAYLOAD + "_2"));
+        List<Event> events = ordersStream.getEvents(1,5).collect(Collectors.toList());
+        assertThat(events.size(), is(2));
+        assertThat(events.get(0).getPayload(), is(EVENT_PAYLOAD + "_1"));
+        assertThat(events.get(0).getSequence(), is(1l));
+    }
+
+    @Test
+    public void shouldGetRangedAggregationsFromTheEventStream(){
+        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        List<String> aggregations = eventStore.getAggregations(0, 1).collect(Collectors.toList());
+        assertThat(aggregations.size(), is(1));
+    }
+
+    @Test
+    public void shouldGetRangedStreamBasedOnAggregation(){
+        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        List<String> orders = eventStore.getStreams("orders", 0, 1).collect(Collectors.toList());
+        assertThat(orders.size(), is(1));
+        assertThat(orders.get(0), is("1"));
+    }
+
 }
