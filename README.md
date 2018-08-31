@@ -2,6 +2,9 @@
 
 [![CircleCI](https://circleci.com/gh/biharck/eventstore.svg?style=svg)](https://circleci.com/gh/biharck/eventstore)
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/br.net.eventstore/event.store/badge.svg)](https://maven-badges.herokuapp.com/maven-central/br.net.eventstore/event.store)
+
+
 ## Usage
 
 ### Create the EventStore:
