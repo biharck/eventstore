@@ -1,6 +1,6 @@
 # EventStore
 
-[![CircleCI](https://circleci.com/gh/biharck/eventstore.svg?style=svg)](https://circleci.com/gh/biharck/eventstore) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/br.net.eventstore/event.store/badge.svg)](https://maven-badges.herokuapp.com/maven-central/br.net.eventstore/event.store)
+[![CircleCI](https://circleci.com/gh/biharck/eventstore.svg?style=svg)](https://circleci.com/gh/biharck/eventstore) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/br.net.eventstore/event.store/badge.svg)](https://maven-badges.herokuapp.com/maven-central/br.net.eventstore/event.store) [![Coverage Status](https://coveralls.io/repos/github/biharck/eventstore/badge.svg?branch=master)](https://coveralls.io/github/biharck/eventstore?branch=master)
 
 
 ## Usage
