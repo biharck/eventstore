@@ -45,8 +45,7 @@ public class RedisProvider implements Provider{
 
     @Override
     public Stream<Event> getEvents(String aggregation, String streamId){
-        List<String> history = commands.lrange(getKey(aggregation, streamId), 0, -1);
-        return history.stream().map(data -> serializer.fromJson(data, Event.class));
+        return getEvents(aggregation, streamId, 0, -1);
     }
 
     @Override
