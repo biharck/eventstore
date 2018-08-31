@@ -30,7 +30,7 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       - run: gradle pitest
-      - run: gradle coveralls
+      - run: gradle jacocoTestReport coveralls
 
   deploy:
     docker:
