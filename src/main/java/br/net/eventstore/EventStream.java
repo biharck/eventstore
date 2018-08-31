@@ -5,6 +5,7 @@ import br.net.eventstore.model.Message;
 import br.net.eventstore.provider.Provider;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * An Event Stream
@@ -22,11 +23,18 @@ public class EventStream  {
     }
 
     /**
-     * Rertieve a list containing all the events in the stream in order.
+     * Retrieves a ranged list containing all the events in the stream in order.
      * @return All the events
      */
-    public List<Event> getEvents(){
+    public Stream<Event> getEvents(int offset, int limit){
+        return getProvider().getEvents(aggregation, streamId, offset, limit);
+    }
 
+    /**
+     * Retrieves a list containing all the events in the stream in order.
+     * @return All the events
+     */
+    public Stream<Event> getEvents(){
         return getProvider().getEvents(aggregation, streamId);
     }
 

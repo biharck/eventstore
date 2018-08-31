@@ -51,7 +51,7 @@ public class InMemoryPublisherTest {
 
         ordersStream.addEvent(new Event(EVENT_PAYLOAD));
         assertThat(count, is(1));
-        subscription.remove();;
+        subscription.remove();
         ordersStream.addEvent(new Event(EVENT_PAYLOAD));
         assertThat(count, is(1));
     }

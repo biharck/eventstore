@@ -6,6 +6,8 @@ import br.net.eventstore.publisher.Publisher;
 import br.net.eventstore.publisher.Subscription;
 import br.net.eventstore.publisher.Subscriber;
 
+import java.util.stream.Stream;
+
 /**
  * The EventStore itself. To create EventStore instances, use the {@link EventStoreBuilder}
  */
@@ -42,6 +44,42 @@ public class EventStore implements HasSubscribers {
         assert (publisher != null && publisher instanceof  HasSubscribers):
                 "There is no valid Publisher configured. Configure a Publisher that implements HasSubscribers interface";
         return ((HasSubscribers) publisher).subscribe(aggregation, subscriber);
+    }
+
+    /**
+     * Retrieves the aggregation list
+     * @return The aggregation list
+     */
+    public Stream<String> getAggregations(){
+        return getProvider().getAggregations();
+    }
+
+    /**
+     * Retrieves a ranged aggregation list
+     * @param offset The start position in the aggregation list
+     * @param limit The desired quantity aggregations
+     * @return The aggregation list
+     */
+    public Stream<String> getAggregations(int offset, int limit){
+        return getProvider().getAggregations(offset, limit);
+    }
+
+    /**
+     * Retrieves the stream list
+     * @return The stream list
+     */
+    public Stream<String> getStreams(String aggregation){
+        return getProvider().getStreams(aggregation);
+    }
+
+    /**
+     * Retrieves a ranged stream list
+     * @param offset The start position in the stream list
+     * @param limit The desired quantity streams
+     * @return The stream list
+     */
+    public Stream<String> getStreams(String aggregation, int offset, int limit){
+        return getProvider().getStreams(aggregation, offset, limit);
     }
 
     Provider getProvider() {

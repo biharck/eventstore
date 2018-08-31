@@ -22,14 +22,12 @@ public class RedisPublisher implements Publisher, HasSubscribers {
     private static Lock writeLock = new ReentrantLock();
 
     private ConcurrentHashMap<String, List<Subscriber>> listeners = new ConcurrentHashMap<>();
-    private final RedisClient redisClient;
     private StatefulRedisPubSubConnection<String, String> connection;
     private RedisPubSubAsyncCommands<String, String> commands;
     private Gson serializer;
     private RedisPubSubListener<String, String> listener;
 
     public RedisPublisher(RedisClient redisClient) {
-        this.redisClient = redisClient;
         connection = redisClient.connectPubSub();
         commands = connection.async();
         serializer = new Gson();
