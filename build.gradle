@@ -135,3 +135,5 @@ uploadArchives {
         }
     }
 }
+
+afterReleaseBuild.dependsOn uploadArchives
