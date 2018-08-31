@@ -56,12 +56,14 @@ public interface Provider {
 
     /**
      * Retrieves the stream list
+     * @param aggregation The aggregation
      * @return The stream list
      */
     Stream<String> getStreams(String aggregation);
 
     /**
      * Retrieves a ranged stream list
+     * @param aggregation The aggregation
      * @param offset The start position in the stream list
      * @param limit The desired quantity streams
      * @return The stream list

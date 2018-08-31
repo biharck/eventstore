@@ -24,6 +24,8 @@ public class EventStream  {
 
     /**
      * Retrieves a ranged list containing all the events in the stream in order.
+     * @param offset The start position in the stream list
+     * @param limit The desired quantity events
      * @return All the events
      */
     public Stream<Event> getEvents(int offset, int limit){
