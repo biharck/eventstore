@@ -36,9 +36,9 @@ jobs:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
-   test:
-      - pitest
-      - run: gradle pitest
+  test:
+    - pitest
+    - run: gradle pitest
 
   deploy:
       - deploy
