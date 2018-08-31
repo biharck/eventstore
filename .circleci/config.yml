@@ -58,7 +58,8 @@ jobs:
         - ~/.gradle
         key: v1-dependencies-{{ checksum "build.gradle" }}
 
-    - run: ./deploy.sh
+    - run: openssl aes-256-cbc -K
+    - run: gradle uploadArchives -PossrhUsername=${SONATYPE_USERNAME} -PossrhPassword=${SONATYPE_PASSWORD} -Psigning.keyId=${GPG_KEY_ID} -Psigning.password=${GPG_KEY_PASSPHRASE} -Psigning.secretKeyRingFile=my.travis.gpg
 
 workflows:
   version: 2
@@ -66,5 +67,9 @@ workflows:
     jobs:
       - build
       - deploy:
+          type: approval
           requires:
             - build
+          filters:
+            branches:
+              only: master
