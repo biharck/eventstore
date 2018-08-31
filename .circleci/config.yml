@@ -1,7 +1,6 @@
 version: 2
 jobs:
   build:
-    - build
     docker:
       - image: circleci/openjdk:8-jdk
       - image: circleci/redis
@@ -30,11 +29,9 @@ jobs:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
   test:
-    - pitest
     - run: gradle pitest
 
   deploy:
-      - deploy
       - run: ./deploy.sh
 
 workflows:
