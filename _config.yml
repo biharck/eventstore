@@ -1,4 +1,4 @@
-theme: ekyll-theme-minimal
+theme: jekyll-theme-minimal
 
 title: Event.Store
 description: [A simple and fast EventStore that support multiple persistence and notification providers]
