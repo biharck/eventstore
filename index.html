@@ -158,18 +158,23 @@ eventStore.subscribe("orders", message -> {
 
     <leanty-source-code-example id="react">
         <leanty-source label="Javascript" language="javascript">
-eventStore.subscribe('orders', message => {
+const subscription = await eventStore.subscribe('orders', message => {
     console.log(message.aggregation);
     console.log(message.streamId);
     console.log(message.event.payload);
 });
+// ...
+subscription.remove();
         </leanty-source>
         <leanty-source label="Java" language="java">
-eventStore.subscribe("orders", message -> {
+Subscription subscription = eventStore.subscribe("orders", message -> {
     System.out.println(message.getAggregation());
     System.out.println(message.getStreamId());
     System.out.println(getEvent().getPayload());
 });
+
+// ...
+subscription.remove();
         </leanty-source>
     </leanty-source-code-example>    
 
