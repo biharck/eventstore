@@ -34,6 +34,8 @@ repositories {
 dependencies {
     compile 'io.lettuce:lettuce-core:5.0.5.RELEASE'
     compile 'com.rabbitmq:amqp-client:5.4.0'
+    compile group: 'org.apache.commons', name: 'commons-pool2', version: '2.6.0'
+
 	testCompile 'junit:junit:4.12'
     testCompile group: 'org.awaitility', name: 'awaitility', version: '3.1.2'
     implementation 'com.google.code.gson:gson:2.8.5'
