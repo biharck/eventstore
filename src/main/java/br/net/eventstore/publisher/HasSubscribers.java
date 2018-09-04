@@ -10,5 +10,5 @@ public interface HasSubscribers {
      * @param subscriber Declares the function to be called to handle new messages
      * @return A subscription. Can be used to remove the subscription to the publisher channel.
      */
-    Subscription subscribe(String aggregation, Subscriber subscriber);
+    Subscription subscribe(String aggregation, Subscriber subscriber) throws SubscriptionException;
 }

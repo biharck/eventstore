@@ -39,7 +39,7 @@ public class RedisPublisherTest {
     }
 
     @Test
-    public void shouldListenToEventsInTheEventStream() throws InterruptedException {
+    public void shouldListenToEventsInTheEventStream() throws Exception {
 
         EventStore eventStoreNotified = new EventStoreBuilder()
                 .setProvider(new InMemoryProvider())
@@ -58,7 +58,7 @@ public class RedisPublisherTest {
     }
 
     @Test
-    public void shouldUnsubscribeToTheEventStream() {
+    public void shouldUnsubscribeToTheEventStream() throws Exception {
         EventStore eventStoreNotified = new EventStoreBuilder()
                 .setProvider(new InMemoryProvider())
                 .setPublisher(new RedisPublisher("redis://127.0.0.1:6379/6"))

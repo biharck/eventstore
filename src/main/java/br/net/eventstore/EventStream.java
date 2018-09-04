@@ -45,7 +45,7 @@ public class EventStream  {
      * @param event The event
      * @return The event, updated with informations like its sequence order and commitTimestamp
      */
-    public Event addEvent(Event event){
+    public Event addEvent(Event event) throws Exception {
         Event addedEvent = getProvider().addEvent(aggregation, streamId, event);
         if (eventStore.getPublisher() != null) {
             Message message = new Message().setAggregation(aggregation).setStreamId(streamId).setEvent(addedEvent);

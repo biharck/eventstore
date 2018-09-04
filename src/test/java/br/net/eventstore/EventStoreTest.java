@@ -32,7 +32,7 @@ public class EventStoreTest {
     }
 
     @Test
-    public void shouldBeAbleToGetTheAggregationsList(){
+    public void shouldBeAbleToGetTheAggregationsList() throws Exception {
         String streamId = "1";
         String aggregation = "orders";
         EventStream ordersStream = eventStore.getEventStream(aggregation, streamId);

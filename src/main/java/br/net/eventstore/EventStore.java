@@ -1,10 +1,7 @@
 package br.net.eventstore;
 
 import br.net.eventstore.provider.Provider;
-import br.net.eventstore.publisher.HasSubscribers;
-import br.net.eventstore.publisher.Publisher;
-import br.net.eventstore.publisher.Subscription;
-import br.net.eventstore.publisher.Subscriber;
+import br.net.eventstore.publisher.*;
 
 import java.util.stream.Stream;
 
@@ -40,7 +37,7 @@ public class EventStore implements HasSubscribers {
      * @return A subscription. Can be used to remove the subscription to the publisher channel.
      */
     @Override
-    public Subscription subscribe(String aggregation, Subscriber subscriber) {
+    public Subscription subscribe(String aggregation, Subscriber subscriber) throws SubscriptionException {
         assert (publisher != null && publisher instanceof  HasSubscribers):
                 "There is no valid Publisher configured. Configure a Publisher that implements HasSubscribers interface";
         return ((HasSubscribers) publisher).subscribe(aggregation, subscriber);

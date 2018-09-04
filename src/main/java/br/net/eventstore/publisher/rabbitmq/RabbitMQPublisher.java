@@ -1,9 +1,6 @@
 package br.net.eventstore.publisher.rabbitmq;
 
-import br.net.eventstore.publisher.Publisher;
-import br.net.eventstore.publisher.Subscriber;
-import br.net.eventstore.publisher.Subscription;
-import br.net.eventstore.publisher.HasSubscribers;
+import br.net.eventstore.publisher.*;
 import br.net.eventstore.model.Message;
 import com.google.gson.Gson;
 import com.rabbitmq.client.*;
@@ -25,7 +22,7 @@ public class RabbitMQPublisher implements Publisher, HasSubscribers {
     }
 
     @Override
-    public void publish(Message message) {
+    public void publish(Message message) throws PublishException {
         Channel channel = null;
         try {
             channel = channels.borrowObject();
@@ -34,6 +31,7 @@ public class RabbitMQPublisher implements Publisher, HasSubscribers {
 
             channel.basicPublish(message.getAggregation(), "", null, serializer.toJson(message).getBytes());
         } catch (Exception e) {
+            throw new PublishException("Remove subscription failed", e);
 
         } finally {
              if (channel != null) {
@@ -43,7 +41,7 @@ public class RabbitMQPublisher implements Publisher, HasSubscribers {
     }
 
     @Override
-    public Subscription subscribe(String aggregation, Subscriber subscriber) {
+    public Subscription subscribe(String aggregation, Subscriber subscriber) throws SubscriptionException {
         Channel channel = null;
         try {
             channel = channels.borrowObject();
@@ -68,16 +66,16 @@ public class RabbitMQPublisher implements Publisher, HasSubscribers {
                     ch = channels.borrowObject();
                     ch.basicCancel(((DefaultConsumer) consumer).getConsumerTag());
                 } catch (Exception e) {
-
+                    throw new SubscriptionException("Remove subscription failed", e);
                 } finally {
-                    if (ch != null){
+                    if (ch != null) {
                         channels.returnObject(ch);
                     }
                 }
                 return;
             };
         } catch (Exception e) {
-            return null;
+            throw new SubscriptionException("Subscription failed", e);
         } finally {
             if (channel != null) {
                 channels.returnObject(channel);
