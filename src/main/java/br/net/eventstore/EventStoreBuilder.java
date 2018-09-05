@@ -4,21 +4,21 @@ import br.net.eventstore.model.Event;
 import br.net.eventstore.model.Message;
 import br.net.eventstore.publisher.Publisher;
 import br.net.eventstore.publisher.Subscriber;
-import br.net.eventstore.provider.Provider;
+import br.net.eventstore.provider.PersistenceProvider;
 
 /**
  * Builder class for {@link EventStore} instances
  */
 public class EventStoreBuilder {
-    private Provider provider;
+    private PersistenceProvider provider;
     private Publisher publisher;
 
     /**
-     * Inform the {@link Provider} used to handle the persistence of the events in the EventStore
+     * Inform the {@link PersistenceProvider} used to handle the persistence of the events in the EventStore
      * @param provider Handle the event persistence
      * @return The Builder instance
      */
-    public EventStoreBuilder setProvider(Provider provider) {
+    public EventStoreBuilder setProvider(PersistenceProvider provider) {
         this.provider = provider;
         return this;
     }

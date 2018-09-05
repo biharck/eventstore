@@ -1,18 +1,20 @@
 package br.net.eventstore.provider;
 
 import br.net.eventstore.model.Event;
+import br.net.eventstore.model.EventPayload;
 import com.google.gson.Gson;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.sync.RedisCommands;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Stream;
 
 /**
  * A Persistence Provider that handle all the data in redis.
  */
-public class RedisProvider implements Provider{
+public class RedisProvider implements PersistenceProvider{
 
     private StatefulRedisPubSubConnection<String, String> connection;
     private RedisCommands<String, String> commands;
@@ -29,18 +31,19 @@ public class RedisProvider implements Provider{
     }
 
     @Override
-    public Event addEvent(String aggregation, String streamId, Event event){
+    public Event addEvent(String aggregation, String streamId, EventPayload payload){
 
-        event.setSequence(commands.incr("sequences:{" + getKey(aggregation, streamId) + "}")-1);
-        event.setCommitTimestamp(Long.parseLong(commands.time().get(0)));
+        long sequence = commands.incr("sequences:{" + getKey(aggregation, streamId) + "}")-1;
+        long timestamp = Long.parseLong(commands.time().get(0));
+        Event newEvent = new Event(payload.getData(), timestamp, sequence);
 
         commands.multi();
-        commands.rpush(getKey(aggregation, streamId), serializer.toJson(event));
+        commands.rpush(getKey(aggregation, streamId), serializer.toJson(newEvent));
         commands.zadd("meta:aggregations:"+aggregation, 1, streamId);
         commands.zadd("meta:aggregations", 1, aggregation);
         commands.exec();
 
-        return event;
+        return newEvent;
     }
 
     @Override

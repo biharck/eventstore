@@ -11,18 +11,15 @@ public class Event {
     private long commitTimestamp;
     private long sequence;
 
-    /**
-     * Default Constructor
-     */
-    public Event() { }
 
     /**
      * Create a new Event with the given payload
      * @param payload Any data associated
      */
-    public Event(String payload) {
-        this();
-        setPayload(payload);
+    public Event(String payload, long commitTimestamp, long sequence) {
+        this.payload = payload;
+        this.commitTimestamp = commitTimestamp;
+        this.sequence = sequence;
     }
 
     /**
@@ -34,25 +31,11 @@ public class Event {
     }
 
     /**
-     * Inform the event payload. The payload can be any data associated with the event
-     * @param payload The event payload
-     */
-    public void setPayload(String payload) { this.payload = payload; }
-
-    /**
      * Retrieve the sequence order for the event in the {@link EventStream}
      * @return The order of the event in the stream
      */
     public long getSequence() {
         return sequence;
-    }
-
-    /**
-     * Inform the sequence order for the event in the {@link EventStream}
-     * @param sequence The order of the event in the stream
-     */
-    public void setSequence(long sequence){
-        this.sequence = sequence;
     }
 
     /**
@@ -63,11 +46,4 @@ public class Event {
         return commitTimestamp;
     }
 
-    /**
-     * Inform the time where the event was persisted in the {@link EventStream}
-     * @param commitTimestamp When the event was persisted in the stream
-     */
-    public void setCommitTimestamp(long commitTimestamp) {
-        this.commitTimestamp = commitTimestamp;
-    }
 }

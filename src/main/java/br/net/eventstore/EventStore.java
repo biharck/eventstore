@@ -1,6 +1,6 @@
 package br.net.eventstore;
 
-import br.net.eventstore.provider.Provider;
+import br.net.eventstore.provider.PersistenceProvider;
 import br.net.eventstore.publisher.*;
 
 import java.util.stream.Stream;
@@ -10,10 +10,10 @@ import java.util.stream.Stream;
  */
 public class EventStore implements HasSubscribers {
 
-    private Provider provider;
+    private PersistenceProvider provider;
     private Publisher publisher;
 
-    EventStore(Provider provider, Publisher publisher){
+    EventStore(PersistenceProvider provider, Publisher publisher){
         this.provider = provider;
         this.publisher = publisher;
     }
@@ -81,7 +81,7 @@ public class EventStore implements HasSubscribers {
         return getProvider().getStreams(aggregation, offset, limit);
     }
 
-    Provider getProvider() {
+    PersistenceProvider getProvider() {
         return provider;
     }
 

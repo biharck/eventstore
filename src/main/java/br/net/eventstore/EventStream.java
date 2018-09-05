@@ -1,8 +1,9 @@
 package br.net.eventstore;
 
 import br.net.eventstore.model.Event;
+import br.net.eventstore.model.EventPayload;
 import br.net.eventstore.model.Message;
-import br.net.eventstore.provider.Provider;
+import br.net.eventstore.provider.PersistenceProvider;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -42,11 +43,11 @@ public class EventStream  {
 
     /**
      * Add a new event to the end of the event stream.
-     * @param event The event
-     * @return The event, updated with informations like its sequence order and commitTimestamp
+     * @param payload The event payload
+     * @return The event, updated with information like its sequence order and commitTimestamp
      */
-    public Event addEvent(Event event) throws Exception {
-        Event addedEvent = getProvider().addEvent(aggregation, streamId, event);
+    public Event addEvent(EventPayload payload) {
+        Event addedEvent = getProvider().addEvent(aggregation, streamId, payload);
         if (eventStore.getPublisher() != null) {
             Message message = new Message().setAggregation(aggregation).setStreamId(streamId).setEvent(addedEvent);
             eventStore.getPublisher().publish(message);
@@ -70,7 +71,7 @@ public class EventStream  {
         return streamId;
     }
 
-    private Provider getProvider() {
+    private PersistenceProvider getProvider() {
         assert(eventStore.getProvider() != null): "No Provider configured in EventStore.";
         return eventStore.getProvider();
     }

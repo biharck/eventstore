@@ -1,6 +1,7 @@
 package br.net.eventstore;
 
 import br.net.eventstore.model.Event;
+import br.net.eventstore.model.EventPayload;
 import br.net.eventstore.provider.InMemoryProvider;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +37,7 @@ public class EventStoreTest {
         String streamId = "1";
         String aggregation = "orders";
         EventStream ordersStream = eventStore.getEventStream(aggregation, streamId);
-        ordersStream.addEvent(new Event("payload"));
+        ordersStream.addEvent(new EventPayload("payload"));
         Stream<String> aggregations = eventStore.getAggregations();
         List<String> aggregationsList = aggregations.collect(Collectors.toList());
         assertThat(aggregationsList.size(), is(1));

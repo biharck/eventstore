@@ -3,6 +3,7 @@ package br.net.eventstore.provider;
 import br.net.eventstore.EventStore;
 import br.net.eventstore.EventStream;
 import br.net.eventstore.model.Event;
+import br.net.eventstore.model.EventPayload;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -11,16 +12,16 @@ import java.util.stream.Stream;
  * A Persistence provider for the {@link EventStore}. It is responsible for write and read {@link Event}s
  * in the {@link EventStream}
  */
-public interface Provider {
+public interface PersistenceProvider {
 
     /**
      * Add a new {@link Event} in the {@link EventStream}
      * @param aggregation The parent aggregation
      * @param streamId The {@link EventStream} identifier
-     * @param event The Event
+     * @param payload The Event payload
      * @return The updated event, after persisted.
      */
-    Event addEvent(String aggregation, String streamId, Event event);
+    Event addEvent(String aggregation, String streamId, EventPayload payload);
 
     /**
      * Retrieves a list of events in the {@link EventStream}

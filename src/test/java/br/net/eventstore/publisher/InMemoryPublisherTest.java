@@ -4,6 +4,7 @@ import br.net.eventstore.EventStore;
 import br.net.eventstore.EventStoreBuilder;
 import br.net.eventstore.EventStream;
 import br.net.eventstore.model.Event;
+import br.net.eventstore.model.EventPayload;
 import br.net.eventstore.provider.InMemoryProvider;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,7 +40,7 @@ public class InMemoryPublisherTest {
             assertThat(message.getEvent().getPayload(), is(EVENT_PAYLOAD));
         });
 
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
     }
 
     @Test
@@ -49,10 +50,10 @@ public class InMemoryPublisherTest {
             count++;
         });
 
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         assertThat(count, is(1));
         subscription.remove();
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         assertThat(count, is(1));
     }
 }

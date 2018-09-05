@@ -4,6 +4,7 @@ import br.net.eventstore.EventStore;
 import br.net.eventstore.EventStoreBuilder;
 import br.net.eventstore.EventStream;
 import br.net.eventstore.model.Event;
+import br.net.eventstore.model.EventPayload;
 import br.net.eventstore.provider.InMemoryProvider;
 import br.net.eventstore.publisher.PublishException;
 import br.net.eventstore.publisher.Subscription;
@@ -48,7 +49,7 @@ public class RabbitMQPublisherTest {
     public void shouldHandleExceptionsWhenPublishing() throws Exception {
         when(pool.borrowObject()).thenThrow(new Exception("Test Exception"));
 
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         verify(pool, times(0)).returnObject(any(Channel.class));
 
     }

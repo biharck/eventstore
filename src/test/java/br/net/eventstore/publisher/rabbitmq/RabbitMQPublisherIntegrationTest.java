@@ -4,6 +4,7 @@ import br.net.eventstore.EventStore;
 import br.net.eventstore.EventStoreBuilder;
 import br.net.eventstore.EventStream;
 import br.net.eventstore.model.Event;
+import br.net.eventstore.model.EventPayload;
 import br.net.eventstore.provider.InMemoryProvider;
 import br.net.eventstore.publisher.Subscription;
 import com.rabbitmq.client.Channel;
@@ -52,7 +53,7 @@ public class RabbitMQPublisherIntegrationTest {
             count++;
         });
 
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         await().atMost(2, TimeUnit.SECONDS).until(() -> count == 1);
         verify(pool, times(2)).returnObject(any(Channel.class));
     }
@@ -64,14 +65,14 @@ public class RabbitMQPublisherIntegrationTest {
             count++;
         });
 
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
 
         await().atMost(2, TimeUnit.SECONDS).until(() -> count == 1);
        subscription.remove();
 
        verify(pool, times(3)).returnObject(any(Channel.class));
 
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
 
         Thread.sleep(1000);
 

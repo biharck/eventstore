@@ -4,6 +4,7 @@ import br.net.eventstore.EventStore;
 import br.net.eventstore.EventStoreBuilder;
 import br.net.eventstore.EventStream;
 import br.net.eventstore.model.Event;
+import br.net.eventstore.model.EventPayload;
 import br.net.eventstore.provider.InMemoryProvider;
 import io.lettuce.core.RedisClient;
 import org.junit.Before;
@@ -53,7 +54,7 @@ public class RedisPublisherTest {
             count++;
         });
 
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         await().atMost(10, TimeUnit.SECONDS).until(() -> count == 1);
     }
 
@@ -68,13 +69,13 @@ public class RedisPublisherTest {
             count++;
         });
 
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
 
         await().atMost(10, TimeUnit.SECONDS).until(() -> count == 1);
         subscription.remove();
 
         await().atLeast(2, TimeUnit.SECONDS);
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         await().atLeast(2, TimeUnit.SECONDS);
         assertThat(count, is(1));
     }
