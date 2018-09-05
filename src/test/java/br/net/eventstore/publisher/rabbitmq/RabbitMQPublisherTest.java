@@ -5,68 +5,63 @@ import br.net.eventstore.EventStoreBuilder;
 import br.net.eventstore.EventStream;
 import br.net.eventstore.model.Event;
 import br.net.eventstore.provider.InMemoryProvider;
-import br.net.eventstore.publisher.RedisPublisher;
+import br.net.eventstore.publisher.PublishException;
 import br.net.eventstore.publisher.Subscription;
-import io.lettuce.core.RedisClient;
+import br.net.eventstore.publisher.SubscriptionException;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.MockitoRule;
 
-import java.util.concurrent.TimeUnit;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.*;
 
-import static org.awaitility.Awaitility.await;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
+@RunWith(MockitoJUnitRunner.class)
 public class RabbitMQPublisherTest {
 
-    protected final String EVENT_PAYLOAD = "Event Data";
-    protected EventStore eventStore;
-    protected EventStream ordersStream;
-    protected int count = 0;
+    private final String EVENT_PAYLOAD = "Event Data";
+    private EventStore eventStore;
+    private EventStream ordersStream;
+//    @Mock private Channel channel;
+    @Mock private ChannelPool pool;
 
+    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Before
-    public void setUp(){
+    public void setUp() throws Exception {
         String streamId = "1";
         String aggregation = "orders";
         eventStore = new EventStoreBuilder()
                 .setProvider(new InMemoryProvider())
-                .setPublisher(new RabbitMQPublisher("amqp://localhost"))
+                .setPublisher(new RabbitMQPublisher(pool))
                 .createEventStore();
         ordersStream = eventStore.getEventStream(aggregation, streamId);
     }
 
-    @Test
-    public void shouldListenToEventsInTheEventStream() throws Exception {
-        count = 0;
+    @Test(expected = PublishException.class)
+    public void shouldHandleExceptionsWhenPublishing() throws Exception {
+        when(pool.borrowObject()).thenThrow(new Exception("Test Exception"));
+
+        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
+        verify(pool, times(0)).returnObject(any(Channel.class));
+
+    }
+
+
+    @Test(expected = SubscriptionException.class)
+    public void shouldHandleExceptionsWhenSubscription() throws Exception {
+        when(pool.borrowObject()).thenThrow(new Exception("Test Exception"));
+
         eventStore.subscribe(ordersStream.getAggregation(), message -> {
-            assertThat(message.getStreamId(), is(ordersStream.getStreamId()));
-            assertThat(message.getAggregation(), is(ordersStream.getAggregation()));
-            assertThat(message.getEvent().getPayload(), is(EVENT_PAYLOAD));
-            count++;
+            fail("Should not be called");
         });
-
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
-        await().atMost(10, TimeUnit.SECONDS).until(() -> count == 1);
+        verify(pool, times(0)).returnObject(any(Channel.class));
     }
-
-    @Test
-    public void shouldUnsubscribeToTheEventStream() throws Exception {
-        count = 0;
-        Subscription subscription = eventStore.subscribe(ordersStream.getAggregation(), message -> {
-            count++;
-        });
-
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
-
-        await().atMost(10, TimeUnit.SECONDS).until(() -> count == 1);
-        subscription.remove();
-
-        await().atLeast(2, TimeUnit.SECONDS);
-        ordersStream.addEvent(new Event(EVENT_PAYLOAD));
-        await().atLeast(2, TimeUnit.SECONDS);
-        assertThat(count, is(1));
-    }
-
 
 }

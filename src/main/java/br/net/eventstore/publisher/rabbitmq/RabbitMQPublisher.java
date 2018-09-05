@@ -17,7 +17,11 @@ public class RabbitMQPublisher implements Publisher, HasSubscribers {
 
 
     public RabbitMQPublisher(String uri) {
-        channels = new ChannelPool(uri);
+        this(new ChannelPool(uri));
+    }
+
+    public RabbitMQPublisher(ChannelPool pool) {
+        channels = pool;
         serializer = new Gson();
     }
 
@@ -72,7 +76,6 @@ public class RabbitMQPublisher implements Publisher, HasSubscribers {
                         channels.returnObject(ch);
                     }
                 }
-                return;
             };
         } catch (Exception e) {
             throw new SubscriptionException("Subscription failed", e);
