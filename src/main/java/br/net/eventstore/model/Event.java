@@ -15,6 +15,8 @@ public class Event {
     /**
      * Create a new Event with the given payload
      * @param payload Any data associated
+     * @param commitTimestamp The timestamp when the event gets created
+     * @param sequence The auto increment value which defines the event order
      */
     public Event(String payload, long commitTimestamp, long sequence) {
         this.payload = payload;
