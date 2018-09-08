@@ -5,7 +5,7 @@ layout: default
     <script type="text/javascript" src="./webcomponents-lite.js"></script>
     <script type="text/javascript" src="./source-code-example.js"></script>
         
-    <h1>EventStore</h1>
+    <h1>Event.Store</h1>
 
     <p>Event.Store is an open source library to create <a href="https://martinfowler.com/eaaDev/EventSourcing.html">Event Stores</a> 
         that works with multiple persistence providers and notification systems.</p>
@@ -13,7 +13,7 @@ layout: default
     <p>The Event Store is a database accompanied by a publication and subscription system.
         The database stores all the events related to an event stream. The pub / sub system allows
         other systems or microservices to react to changes in event streams. It is a core component in 
-        any event sourcing + cqrs architectures.
+        any event sourcing + CQRS architectures.
     </p>
 
     <p>Event.Store has client implementations for <a href="https://github.com/thiagobustamante/node-eventstore">Node.js</a> and 
@@ -94,11 +94,11 @@ EventStore eventStore = new EventStoreBuilder()
     <leanty-source-code-example id="add">
         <leanty-source label="Javascript" language="javascript">
 const ordersStream = eventStore.getEventStream('orders', '1234567');
-ordersStream.addEvent({ payload: 'My Event Payload'}); // Could pass anything here
+ordersStream.addEvent({ data: 'My Event Payload'}); // Could pass anything here
         </leanty-source>
         <leanty-source label="Java" language="java">
 EventStream ordersStream = eventStore.getEventStream("orders", "1234567");
-ordersStream.addEvent(new Event("My Event Payload")); // Could pass a JSON string here
+ordersStream.addEvent(new EventPayload("My Event Payload")); // Could pass a JSON string here
         </leanty-source>
     </leanty-source-code-example>
 
