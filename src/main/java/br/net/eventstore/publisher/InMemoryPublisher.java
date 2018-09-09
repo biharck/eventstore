@@ -17,7 +17,7 @@ public class InMemoryPublisher implements Publisher, HasSubscribers {
 
     @Override
     public void publish(Message message) {
-        List<Subscriber> aggregateListeners = listeners.get(message.getAggregation());
+        List<Subscriber> aggregateListeners = listeners.get(message.getStream().getAggregation());
         if (aggregateListeners != null) {
             aggregateListeners.forEach(subscriber -> subscriber.on(message));
         }

@@ -10,27 +10,16 @@ import br.net.eventstore.publisher.Subscriber;
  * that new {@link Event}s was added to the {@link EventStore}
  */
 public class Message {
-    private String aggregation;
-    private String streamId;
+    private Stream stream;
     private Event event;
 
     /**
-     * Inform the name of the parent aggregation
-     * @param aggregation The parent Aggregation
+     * Inform the associated stream
+     * @param stream The associated stream
      * @return The Message instance
      */
-    public Message setAggregation(String aggregation) {
-        this.aggregation = aggregation;
-        return this;
-    }
-
-    /**
-     * Inform the {@link EventStream} identifier
-     * @param streamId The {@link EventStream} identifier
-     * @return The Message instance
-     */
-    public Message setStreamId(String streamId) {
-        this.streamId = streamId;
+    public Message setStream(Stream stream) {
+        this.stream = stream;
         return this;
     }
 
@@ -51,18 +40,10 @@ public class Message {
     public Event getEvent() { return event; }
 
     /**
-     * Retrieve the name of the parent aggregation
-     * @return The parent aggregation
+     * Retrieve the associated stream
+     * @return The associated stream
      */
-    public String getAggregation() {
-        return aggregation;
-    }
-
-    /**
-     * Retrieve the {@link EventStream} identifier
-     * @return The stream identifier
-     */
-    public String getStreamId() {
-        return streamId;
+    public Stream getStream() {
+        return stream;
     }
 }

@@ -31,9 +31,9 @@ public class RabbitMQPublisher implements Publisher, HasSubscribers {
         try {
             channel = channels.borrowObject();
 
-            channel.exchangeDeclare(message.getAggregation(), "fanout");
+            channel.exchangeDeclare(message.getStream().getAggregation(), "fanout");
 
-            channel.basicPublish(message.getAggregation(), "", null, serializer.toJson(message).getBytes());
+            channel.basicPublish(message.getStream().getAggregation(), "", null, serializer.toJson(message).getBytes());
         } catch (Exception e) {
             throw new PublishException("Remove subscription failed", e);
 

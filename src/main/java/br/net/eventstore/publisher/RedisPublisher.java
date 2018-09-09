@@ -39,7 +39,7 @@ public class RedisPublisher implements Publisher, HasSubscribers {
 
     @Override
     public void publish(Message message) {
-        commands.publish(message.getAggregation(), serializer.toJson(message));
+        commands.publish(message.getStream().getAggregation(), serializer.toJson(message));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class RedisPublisher implements Publisher, HasSubscribers {
                         @Override
                         public void message(String aggregation, String received) {
                             Message message = serializer.fromJson(received, Message.class);
-                            List<Subscriber> aggregateListeners = listeners.get(message.getAggregation());
+                            List<Subscriber> aggregateListeners = listeners.get(message.getStream().getAggregation());
                             if (aggregateListeners != null) {
                                 aggregateListeners.forEach(subscriber -> subscriber.on(message));
                             }

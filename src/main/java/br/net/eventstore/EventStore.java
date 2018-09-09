@@ -26,7 +26,7 @@ public class EventStore implements HasSubscribers {
      * will be created when the first event is added to the stream.
      */
     public EventStream getEventStream(String aggregation, String streamId){
-        return new EventStream(this, aggregation, streamId);
+        return new EventStream(this, new br.net.eventstore.model.Stream(aggregation, streamId));
     }
 
     /**

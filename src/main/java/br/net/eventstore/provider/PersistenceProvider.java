@@ -5,7 +5,6 @@ import br.net.eventstore.EventStream;
 import br.net.eventstore.model.Event;
 import br.net.eventstore.model.EventPayload;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -16,30 +15,27 @@ public interface PersistenceProvider {
 
     /**
      * Add a new {@link Event} in the {@link EventStream}
-     * @param aggregation The parent aggregation
-     * @param streamId The {@link EventStream} identifier
+     * @param stream The associated stream
      * @param payload The Event payload
      * @return The updated event, after persisted.
      */
-    Event addEvent(String aggregation, String streamId, EventPayload payload);
+    Event addEvent(br.net.eventstore.model.Stream stream, EventPayload payload);
 
     /**
      * Retrieves a list of events in the {@link EventStream}
-     * @param aggregation The parent aggregation
-     * @param streamId The {@link EventStream} identifier
+     * @param stream The associated stream
      * @return A List with events in the {@link EventStream}
      */
-    Stream<Event> getEvents(String aggregation, String streamId);
+    Stream<Event> getEvents(br.net.eventstore.model.Stream stream);
 
     /**
      * Retrieves a ranged list of events in the {@link EventStream}
-     * @param aggregation The parent aggregation
-     * @param streamId The {@link EventStream} identifier
+     * @param stream The associated stream
      * @param offset The start position in the events list
      * @param limit The desired quantity events
      * @return A List with events in the {@link EventStream}
      */
-    Stream<Event> getEvents(String aggregation, String streamId, int offset, int limit);
+    Stream<Event> getEvents(br.net.eventstore.model.Stream stream, int offset, int limit);
 
     /**
      * Retrieves the aggregation list

@@ -46,9 +46,9 @@ public class RabbitMQPublisherIntegrationTest {
     @Test
     public void shouldListenToEventsInTheEventStream() throws Exception {
         count = 0;
-        eventStore.subscribe(ordersStream.getAggregation(), message -> {
-            assertThat(message.getStreamId(), is(ordersStream.getStreamId()));
-            assertThat(message.getAggregation(), is(ordersStream.getAggregation()));
+        eventStore.subscribe(ordersStream.getStream().getAggregation(), message -> {
+            assertThat(message.getStream().getId(), is(ordersStream.getStream().getId()));
+            assertThat(message.getStream().getAggregation(), is(ordersStream.getStream().getAggregation()));
             assertThat(message.getEvent().getPayload(), is(EVENT_PAYLOAD));
             count++;
         });
@@ -61,7 +61,7 @@ public class RabbitMQPublisherIntegrationTest {
     @Test
     public void shouldUnsubscribeToTheEventStream() throws Exception {
         count = 0;
-        Subscription subscription = eventStore.subscribe(ordersStream.getAggregation(), message -> {
+        Subscription subscription = eventStore.subscribe(ordersStream.getStream().getAggregation(), message -> {
             count++;
         });
 

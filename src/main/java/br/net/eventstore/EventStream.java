@@ -5,7 +5,6 @@ import br.net.eventstore.model.EventPayload;
 import br.net.eventstore.model.Message;
 import br.net.eventstore.provider.PersistenceProvider;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -13,14 +12,12 @@ import java.util.stream.Stream;
  */
 public class EventStream  {
 
-    private String streamId;
-    private String aggregation;
+    private br.net.eventstore.model.Stream stream;
     private EventStore eventStore;
 
-    EventStream(EventStore eventStore, String aggregation, String streamId){
+    EventStream(EventStore eventStore, br.net.eventstore.model.Stream stream){
         this.eventStore = eventStore;
-        this.aggregation = aggregation;
-        this.streamId = streamId;
+        this.stream = stream;
     }
 
     /**
@@ -30,7 +27,7 @@ public class EventStream  {
      * @return All the events
      */
     public Stream<Event> getEvents(int offset, int limit){
-        return getProvider().getEvents(aggregation, streamId, offset, limit);
+        return getProvider().getEvents(stream, offset, limit);
     }
 
     /**
@@ -38,7 +35,7 @@ public class EventStream  {
      * @return All the events
      */
     public Stream<Event> getEvents(){
-        return getProvider().getEvents(aggregation, streamId);
+        return getProvider().getEvents(stream);
     }
 
     /**
@@ -47,28 +44,20 @@ public class EventStream  {
      * @return The event, updated with information like its sequence order and commitTimestamp
      */
     public Event addEvent(EventPayload payload) {
-        Event addedEvent = getProvider().addEvent(aggregation, streamId, payload);
+        Event addedEvent = getProvider().addEvent(stream, payload);
         if (eventStore.getPublisher() != null) {
-            Message message = new Message().setAggregation(aggregation).setStreamId(streamId).setEvent(addedEvent);
+            Message message = new Message().setStream(stream).setEvent(addedEvent);
             eventStore.getPublisher().publish(message);
         }
         return addedEvent;
     }
 
     /**
-     * Retrieve the parent aggregation for this event stream
-     * @return The parent aggregation
+     * Retrieve the associated stream
+     * @return The associated stream
      */
-    public String getAggregation() {
-        return aggregation;
-    }
-
-    /**
-     * Retrieve the event stream identifier
-     * @return The event stream identifier
-     */
-    public String getStreamId() {
-        return streamId;
+    public br.net.eventstore.model.Stream getStream() {
+        return stream;
     }
 
     private PersistenceProvider getProvider() {

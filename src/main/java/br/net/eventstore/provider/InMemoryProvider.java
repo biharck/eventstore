@@ -3,7 +3,6 @@ package br.net.eventstore.provider;
 import br.net.eventstore.model.Event;
 import br.net.eventstore.model.EventPayload;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,8 +21,8 @@ public class InMemoryProvider implements PersistenceProvider{
     private static Lock writeLock = new ReentrantLock();
 
     @Override
-    public Event addEvent(String aggregation, String streamId, EventPayload payload){
-        List<Event> currentEvents = getEventsList(aggregation, streamId);
+    public Event addEvent(br.net.eventstore.model.Stream stream, EventPayload payload){
+        List<Event> currentEvents = getEventsList(stream);
 
         writeLock.lock();
         try {
@@ -37,13 +36,13 @@ public class InMemoryProvider implements PersistenceProvider{
     }
 
     @Override
-    public Stream<Event> getEvents(String aggregation, String streamId){
-        return getEventsList(aggregation, streamId).stream();
+    public Stream<Event> getEvents(br.net.eventstore.model.Stream stream){
+        return getEventsList(stream).stream();
     }
 
     @Override
-    public Stream<Event> getEvents(String aggregation, String streamId, int offset, int limit) {
-        return getEvents(aggregation, streamId).skip(offset).limit(limit);
+    public Stream<Event> getEvents(br.net.eventstore.model.Stream stream, int offset, int limit) {
+        return getEvents(stream).skip(offset).limit(limit);
     }
 
     @Override
@@ -68,9 +67,9 @@ public class InMemoryProvider implements PersistenceProvider{
         return getStreams(aggregation).sorted().skip(offset).limit(limit);
     }
 
-    private List<Event> getEventsList(String aggregation, String streamId) {
-        ConcurrentHashMap<String, List<Event>> aggregateStreams = store.computeIfAbsent(aggregation, key -> new ConcurrentHashMap<>());
-        return aggregateStreams.computeIfAbsent(streamId, key -> Collections.synchronizedList(new ArrayList<>()));
+    private List<Event> getEventsList(br.net.eventstore.model.Stream stream) {
+        ConcurrentHashMap<String, List<Event>> aggregateStreams = store.computeIfAbsent(stream.getAggregation(), key -> new ConcurrentHashMap<>());
+        return aggregateStreams.computeIfAbsent(stream.getId(), key -> Collections.synchronizedList(new ArrayList<>()));
     }
 
 }

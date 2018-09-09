@@ -34,9 +34,9 @@ public class InMemoryPublisherTest {
     @Test
     public void shouldListenToEventsInTheEventStream() throws Exception {
 
-        eventStore.subscribe(ordersStream.getAggregation(), message -> {
-            assertThat(message.getAggregation(), is(ordersStream.getAggregation()));
-            assertThat(message.getStreamId(), is(ordersStream.getStreamId()));
+        eventStore.subscribe(ordersStream.getStream().getAggregation(), message -> {
+            assertThat(message.getStream().getAggregation(), is(ordersStream.getStream().getAggregation()));
+            assertThat(message.getStream().getId(), is(ordersStream.getStream().getId()));
             assertThat(message.getEvent().getPayload(), is(EVENT_PAYLOAD));
         });
 
@@ -46,7 +46,7 @@ public class InMemoryPublisherTest {
     @Test
     public void shouldUnsubscribeToTheEventStream() throws Exception {
         count = 0;
-        Subscription subscription = eventStore.subscribe(ordersStream.getAggregation(), message -> {
+        Subscription subscription = eventStore.subscribe(ordersStream.getStream().getAggregation(), message -> {
             count++;
         });
 
