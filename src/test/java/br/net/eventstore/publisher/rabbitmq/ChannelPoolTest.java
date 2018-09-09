@@ -32,7 +32,7 @@ public class ChannelPoolTest {
         +---------------------------------------------------------------------*/
         config.setTestOnBorrow(true);
         config.setTestOnReturn(true);
-        pool = new ChannelPool("amqp://localhost", config);
+        pool = new ChannelPool("amqp://127.0.0.1", config);
     }
 
     @Test

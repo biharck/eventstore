@@ -30,7 +30,7 @@ public class RabbitMQPublisherIntegrationTest {
     protected EventStore eventStore;
     protected EventStream ordersStream;
     protected int count = 0;
-    @Spy private ChannelPool pool = new ChannelPool("amqp://localhost");
+    @Spy private ChannelPool pool = new ChannelPool("amqp://127.0.0.1");
 
     @Before
     public void setUp(){
