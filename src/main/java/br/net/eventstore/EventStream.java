@@ -53,11 +53,19 @@ public class EventStream  {
     }
 
     /**
-     * Retrieve the associated stream
-     * @return The associated stream
+     * Retrieve the parent aggregation for this event stream
+     * @return The parent aggregation
      */
-    public br.net.eventstore.model.Stream getStream() {
-        return stream;
+    public String getAggregation() {
+        return stream.getAggregation();
+    }
+
+    /**
+     * Retrieve the event stream identifier
+     * @return The event stream identifier
+     */
+    public String getStreamId() {
+        return stream.getId();
     }
 
     private PersistenceProvider getProvider() {

@@ -53,7 +53,7 @@ public class RabbitMQPublisherTest {
     public void shouldHandleExceptionsWhenSubscription() throws Exception {
         when(pool.borrowObject()).thenThrow(new Exception("Testing SubscriptionException"));
 
-        eventStore.subscribe(ordersStream.getStream().getAggregation(), message -> {
+        eventStore.subscribe(ordersStream.getAggregation(), message -> {
             fail("Should not be called");
         });
         verify(pool, times(0)).returnObject(any(Channel.class));

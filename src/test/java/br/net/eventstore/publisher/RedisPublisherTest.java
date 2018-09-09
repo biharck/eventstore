@@ -47,9 +47,9 @@ public class RedisPublisherTest {
                 .setPublisher(new RedisPublisher("redis://127.0.0.1:6379/6"))
                 .createEventStore();
         count = 0;
-        eventStoreNotified.subscribe(ordersStream.getStream().getAggregation(), message -> {
-            assertThat(message.getStream().getAggregation(), is(ordersStream.getStream().getAggregation()));
-            assertThat(message.getStream().getId(), is(ordersStream.getStream().getId()));
+        eventStoreNotified.subscribe(ordersStream.getAggregation(), message -> {
+            assertThat(message.getStream().getAggregation(), is(ordersStream.getAggregation()));
+            assertThat(message.getStream().getId(), is(ordersStream.getStreamId()));
             assertThat(message.getEvent().getPayload(), is(EVENT_PAYLOAD));
             count++;
         });
@@ -65,7 +65,7 @@ public class RedisPublisherTest {
                 .setPublisher(new RedisPublisher("redis://127.0.0.1:6379/6"))
                 .createEventStore();
         count = 0;
-        Subscription subscription = eventStoreNotified.subscribe(ordersStream.getStream().getAggregation(), message -> {
+        Subscription subscription = eventStoreNotified.subscribe(ordersStream.getAggregation(), message -> {
             count++;
         });
 

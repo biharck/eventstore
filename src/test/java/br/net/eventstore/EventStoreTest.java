@@ -28,8 +28,8 @@ public class EventStoreTest {
         String streamId = "1";
         String aggregation = "orders";
         EventStream ordersStream = eventStore.getEventStream(aggregation, streamId);
-        assertThat(ordersStream.getStream().getId(), is(streamId));
-        assertThat(ordersStream.getStream().getAggregation(), is(aggregation));
+        assertThat(ordersStream.getStreamId(), is(streamId));
+        assertThat(ordersStream.getAggregation(), is(aggregation));
     }
 
     @Test
