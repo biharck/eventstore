@@ -37,7 +37,7 @@ public class InMemoryProviderTest {
     }
 
     @Test
-    public void shouldAddAnEventToTheEventStream() throws Exception {
+    public void shouldAddAnEventToTheEventStream(){
         Event event = ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         assertThat(event, notNullValue());
         assertThat(event.getCommitTimestamp(), notNullValue());
@@ -46,7 +46,7 @@ public class InMemoryProviderTest {
     }
 
     @Test
-    public void shouldGetEventsFromTheEventStream() throws Exception {
+    public void shouldGetEventsFromTheEventStream(){
         ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         List<Event> events = ordersStream.getEvents().collect(Collectors.toList());
         assertThat(events.size(), is(1));
@@ -55,7 +55,7 @@ public class InMemoryProviderTest {
     }
 
     @Test
-    public void shouldGetRangedEventsFromTheEventStream() throws Exception {
+    public void shouldGetRangedEventsFromTheEventStream(){
         ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD + "_1"));
         ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD + "_2"));
@@ -66,14 +66,14 @@ public class InMemoryProviderTest {
     }
 
     @Test
-    public void shouldGetRangedAggregationsFromTheEventStream() throws Exception {
+    public void shouldGetRangedAggregationsFromTheEventStream(){
         ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         List<String> aggregations = eventStore.getAggregations(0, 1).collect(Collectors.toList());
         assertThat(aggregations.size(), is(1));
     }
 
     @Test
-    public void shouldGetRangedStreamBasedOnAggregation() throws Exception {
+    public void shouldGetRangedStreamBasedOnAggregation(){
         ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         List<String> orders = eventStore.getStreams("orders", 0, 1).collect(Collectors.toList());
         assertThat(orders.size(), is(1));

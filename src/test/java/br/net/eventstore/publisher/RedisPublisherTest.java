@@ -3,7 +3,6 @@ package br.net.eventstore.publisher;
 import br.net.eventstore.EventStore;
 import br.net.eventstore.EventStoreBuilder;
 import br.net.eventstore.EventStream;
-import br.net.eventstore.model.Event;
 import br.net.eventstore.model.EventPayload;
 import br.net.eventstore.provider.InMemoryProvider;
 import io.lettuce.core.RedisClient;
@@ -40,7 +39,7 @@ public class RedisPublisherTest {
     }
 
     @Test
-    public void shouldListenToEventsInTheEventStream() throws Exception {
+    public void shouldListenToEventsInTheEventStream(){
 
         EventStore eventStoreNotified = new EventStoreBuilder()
                 .setProvider(new InMemoryProvider())
@@ -59,7 +58,7 @@ public class RedisPublisherTest {
     }
 
     @Test
-    public void shouldUnsubscribeToTheEventStream() throws Exception {
+    public void shouldUnsubscribeToTheEventStream(){
         EventStore eventStoreNotified = new EventStoreBuilder()
                 .setProvider(new InMemoryProvider())
                 .setPublisher(new RedisPublisher("redis://127.0.0.1:6379/6"))

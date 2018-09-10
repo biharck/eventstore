@@ -1,12 +1,10 @@
 package br.net.eventstore;
 
-import br.net.eventstore.model.Event;
 import br.net.eventstore.model.EventPayload;
 import br.net.eventstore.provider.InMemoryProvider;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,7 +31,7 @@ public class EventStoreTest {
     }
 
     @Test
-    public void shouldBeAbleToGetTheAggregationsList() throws Exception {
+    public void shouldBeAbleToGetTheAggregationsList(){
         String streamId = "1";
         String aggregation = "orders";
         EventStream ordersStream = eventStore.getEventStream(aggregation, streamId);

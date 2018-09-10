@@ -3,14 +3,12 @@ package br.net.eventstore.publisher;
 import br.net.eventstore.EventStore;
 import br.net.eventstore.EventStoreBuilder;
 import br.net.eventstore.EventStream;
-import br.net.eventstore.model.Event;
 import br.net.eventstore.model.EventPayload;
 import br.net.eventstore.provider.InMemoryProvider;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 
 public class InMemoryPublisherTest {
@@ -32,7 +30,7 @@ public class InMemoryPublisherTest {
     }
 
     @Test
-    public void shouldListenToEventsInTheEventStream() throws Exception {
+    public void shouldListenToEventsInTheEventStream(){
 
         eventStore.subscribe(ordersStream.getAggregation(), message -> {
             assertThat(message.getStream().getAggregation(), is(ordersStream.getAggregation()));
@@ -44,7 +42,7 @@ public class InMemoryPublisherTest {
     }
 
     @Test
-    public void shouldUnsubscribeToTheEventStream() throws Exception {
+    public void shouldUnsubscribeToTheEventStream(){
         count = 0;
         Subscription subscription = eventStore.subscribe(ordersStream.getAggregation(), message -> {
             count++;

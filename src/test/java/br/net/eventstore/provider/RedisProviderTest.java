@@ -35,7 +35,7 @@ public class RedisProviderTest {
     }
 
     @Test
-    public void shouldAddAnEventToTheEventStream() throws Exception {
+    public void shouldAddAnEventToTheEventStream(){
         Event event = getEventStream("orders", "1").addEvent(new EventPayload(EVENT_PAYLOAD));
         assertThat(event, notNullValue());
         assertThat(event.getCommitTimestamp(), notNullValue());
@@ -43,7 +43,7 @@ public class RedisProviderTest {
     }
 
     @Test
-    public void shouldGetEventsFromTheEventStream() throws Exception {
+    public void shouldGetEventsFromTheEventStream(){
         EventStream eventStream = getEventStream("orders", "2");
         eventStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         List<Event> events = eventStream.getEvents().collect(Collectors.toList());
@@ -53,7 +53,7 @@ public class RedisProviderTest {
     }
 
     @Test
-    public void shouldGetRangedEventsFromTheEventStream() throws Exception {
+    public void shouldGetRangedEventsFromTheEventStream(){
         EventStream eventStream = getEventStream("orders", "2");
         eventStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         eventStream.addEvent(new EventPayload(EVENT_PAYLOAD + "_1"));
@@ -65,7 +65,7 @@ public class RedisProviderTest {
     }
 
     @Test
-    public void shouldGetAggregationsFromTheEventStream() throws Exception {
+    public void shouldGetAggregationsFromTheEventStream(){
         EventStream eventStream = getEventStream("orders", "3");
         eventStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         List<String> aggregations = eventStore.getAggregations().collect(Collectors.toList());
@@ -73,7 +73,7 @@ public class RedisProviderTest {
     }
 
     @Test
-    public void shouldGetStreamBasedOnAggregation() throws Exception {
+    public void shouldGetStreamBasedOnAggregation(){
         EventStream eventStream = getEventStream("orders", "4");
         eventStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         List<String> orders = eventStore.getStreams("orders").collect(Collectors.toList());
@@ -81,7 +81,7 @@ public class RedisProviderTest {
     }
 
     @Test
-    public void shouldGetRangedAggregationsFromTheEventStream() throws Exception {
+    public void shouldGetRangedAggregationsFromTheEventStream(){
         EventStream eventStream = getEventStream("orders", "5");
         eventStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         List<String> aggregations = eventStore.getAggregations(0, 1).collect(Collectors.toList());
@@ -89,7 +89,7 @@ public class RedisProviderTest {
     }
 
     @Test
-    public void shouldGetRangedStreamBasedOnAggregation() throws Exception {
+    public void shouldGetRangedStreamBasedOnAggregation(){
         EventStream eventStream = getEventStream("orders", "6");
         eventStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         List<String> orders = eventStore.getStreams("orders", 0, 1).collect(Collectors.toList());
