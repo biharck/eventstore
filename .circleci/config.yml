@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/openjdk:8-jdk
       - image: circleci/redis
-      - image: circleci/rabbitmq
+      - image: circleci/rabbitmq:3.7.7
 
     working_directory: ~/repo
 
@@ -23,7 +23,7 @@ jobs:
           - v1-dependencies-
 
       - run: docker run -p 6379:6379 -d --name redis circleci/redis
-      - run: docker run -p 8080:15672 -p 5672:5672 -d --name rabbit circleci/rabbitmq
+      - run: docker run -p 8080:15672 -p 5672:5672 -d --name rabbit circleci/rabbitmq:3.7.7
       - run: gradle dependencies
 
       - save_cache:
