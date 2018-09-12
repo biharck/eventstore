@@ -45,6 +45,15 @@ dependencies {
     testCompile 'io.cucumber:cucumber-junit:3.0.2'
 }
 
+sourceSets {
+
+    test {
+        java {
+            srcDirs = ['src/test/unit/java', 'src/test/integration/java']
+        }
+    }
+}
+
 test {
     useJUnit()
     maxHeapSize = '1G'
@@ -54,7 +63,7 @@ pitest {
     targetClasses = ['br.net.eventstore.*']
     threads = 4
     outputFormats = ['XML', 'HTML']
-    coverageThreshold = 95
+//    coverageThreshold = 95
     reportDir = 'build/reports/mutation-tests-results'
     timestampedReports = false
 }
