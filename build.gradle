@@ -2,6 +2,7 @@ buildscript {
 	ext {
         pitestPluginVersion = '1.3.0'
         gradleReleaseVersion = '2.6.0'
+        sonarQubeVersion = '2.6.2'
 	}
 	repositories {
 		mavenCentral()
@@ -11,6 +12,7 @@ buildscript {
 	}
     dependencies{
         classpath "info.solidsoft.gradle.pitest:gradle-pitest-plugin:${pitestPluginVersion}"
+        classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${sonarQubeVersion}")
         classpath "net.researchgate:gradle-release:${gradleReleaseVersion}"
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:1.0.2'
     }
@@ -24,6 +26,7 @@ apply plugin: 'net.researchgate.release'
 apply plugin: 'maven'
 apply plugin: 'signing'
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'org.sonarqube'
 
 sourceCompatibility = 1.8
 
@@ -51,6 +54,29 @@ sourceSets {
         java {
             srcDirs = ['src/test/unit/java', 'src/test/integration/java']
         }
+    }
+}
+
+def sonar_login = hasProperty('SONAR_TOKEN') ? SONAR_TOKEN : System.getenv('SONAR_TOKEN')
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "eventstore"
+        property "sonar.organization", "thiagobustamante-github"
+        property "sonar.projectVersion", "$version"
+        property "sonar.sources", "$projectDir/src/main/java"
+        property "sonar.language", "java"
+        property "sonar.binaries", "$projectDir/build/classes"
+        property "sonar.host.url", "https://codeprobing.appslatam.com"
+        property "sonar.login", sonar_login
+        property "sonar.analysis.mode", "publish"
+        property "sonar.issuesReport.html.enable", "true"
+        property "sonar.scm.disabled", "true"
+        property "sonar.junit.reportsPath", "$projectDir/build/test-results/test"
+        property "sonar.tests", "$projectDir/src/test/unit"
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.jacoco.reportPath", "$projectDir/build/jacoco/unitTest.exec"
+        property "sonar.exclusions", []
     }
 }
 

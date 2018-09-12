@@ -33,6 +33,7 @@ jobs:
 
       - run: gradle pitest
       - run: gradle jacocoTestReport coveralls
+      - run: gradle sonarqube
 
   deploy:
     docker:
