@@ -1,6 +1,7 @@
 # EventStore
 
-[![CircleCI](https://circleci.com/gh/biharck/eventstore.svg?style=svg)](https://circleci.com/gh/biharck/eventstore) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/br.net.eventstore/event.store/badge.svg)](https://maven-badges.herokuapp.com/maven-central/br.net.eventstore/event.store) [![Coverage Status](https://coveralls.io/repos/github/biharck/eventstore/badge.svg?branch=master)](https://coveralls.io/github/biharck/eventstore?branch=master)
+[![CircleCI](https://circleci.com/gh/biharck/eventstore.svg?style=svg)](https://circleci.com/gh/biharck/eventstore) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/br.net.eventstore/event.store/badge.svg)](https://maven-badges.herokuapp.com/maven-central/br.net.eventstore/event.store) [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=eventstore&metric=alert_status)](https://sonarcloud.io/dashboard?id=eventstore)
+
 
 
 Event.Store is an open source library to create Event Stores that works with multiple persistence providers and notification systems.
