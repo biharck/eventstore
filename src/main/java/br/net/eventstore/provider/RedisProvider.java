@@ -7,7 +7,6 @@ import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.sync.RedisCommands;
 import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.stream.Stream;
 

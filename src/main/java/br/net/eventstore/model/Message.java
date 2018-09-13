@@ -2,7 +2,6 @@ package br.net.eventstore.model;
 
 import br.net.eventstore.publisher.Publisher;
 import br.net.eventstore.EventStore;
-import br.net.eventstore.EventStream;
 import br.net.eventstore.publisher.Subscriber;
 
 /**

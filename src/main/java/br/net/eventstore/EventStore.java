@@ -37,8 +37,8 @@ public class EventStore implements HasSubscribers {
      * @return A subscription. Can be used to remove the subscription to the publisher channel.
      */
     @Override
-    public Subscription subscribe(String aggregation, Subscriber subscriber) throws SubscriptionException {
-        assert (publisher != null && publisher instanceof  HasSubscribers):
+    public Subscription subscribe(String aggregation, Subscriber subscriber) {
+        assert (publisher instanceof  HasSubscribers):
                 "There is no valid Publisher configured. Configure a Publisher that implements HasSubscribers interface";
         return ((HasSubscribers) publisher).subscribe(aggregation, subscriber);
     }
