@@ -52,7 +52,6 @@ public class RedisPublisher implements Publisher, HasSubscribers {
                 });
         aggregateListeners.add(subscriber);
 
-
         return () -> {
             commands.unsubscribe(aggregation);
             aggregateListeners.remove(subscriber);
@@ -61,49 +60,53 @@ public class RedisPublisher implements Publisher, HasSubscribers {
 
     private void ensureRedisListener() {
         if (listener == null) {
-            writeLock.lock();
-            if (listener == null) {
-                try {
-                    listener = new RedisPubSubListener<String, String>() {
-                        @Override
-                        public void message(String aggregation, String received) {
-                            Message message = serializer.fromJson(received, Message.class);
-                            List<Subscriber> aggregateListeners = listeners.get(message.getStream().getAggregation());
-                            if (aggregateListeners != null) {
-                                aggregateListeners.forEach(subscriber -> subscriber.on(message));
-                            }
-                        }
+            createRedisListener();
+        }
+    }
 
-                        @Override
-                        public void message(String pattern, String channel, String message) {
-                            // Do nothing. We only need to handle direct messages
+    private void createRedisListener() {
+        writeLock.lock();
+        if (listener == null) {
+            try {
+                listener = new RedisPubSubListener<String, String>() {
+                    @Override
+                    public void message(String aggregation, String received) {
+                        Message message = serializer.fromJson(received, Message.class);
+                        List<Subscriber> aggregateListeners = listeners.get(message.getStream().getAggregation());
+                        if (aggregateListeners != null) {
+                            aggregateListeners.forEach(subscriber -> subscriber.on(message));
                         }
+                    }
 
-                        @Override
-                        public void subscribed(String channel, long count) {
-                            // Do nothing. We only need to handle direct messages
-                        }
+                    @Override
+                    public void message(String pattern, String channel, String message) {
+                        // Do nothing. We only need to handle direct messages
+                    }
 
-                        @Override
-                        public void psubscribed(String pattern, long count) {
-                            // Do nothing. We only need to handle direct messages
-                        }
+                    @Override
+                    public void subscribed(String channel, long count) {
+                        // Do nothing. We only need to handle direct messages
+                    }
 
-                        @Override
-                        public void unsubscribed(String channel, long count) {
-                            // Do nothing. We only need to handle direct messages
-                        }
+                    @Override
+                    public void psubscribed(String pattern, long count) {
+                        // Do nothing. We only need to handle direct messages
+                    }
 
-                        @Override
-                        public void punsubscribed(String pattern, long count) {
-                            // Do nothing. We only need to handle direct messages
-                        }
-                    };
+                    @Override
+                    public void unsubscribed(String channel, long count) {
+                        // Do nothing. We only need to handle direct messages
+                    }
 
-                    connection.addListener(listener);
-                } finally {
-                    writeLock.unlock();
-                }
+                    @Override
+                    public void punsubscribed(String pattern, long count) {
+                        // Do nothing. We only need to handle direct messages
+                    }
+                };
+
+                connection.addListener(listener);
+            } finally {
+                writeLock.unlock();
             }
         }
     }
