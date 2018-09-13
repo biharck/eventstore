@@ -10,5 +10,5 @@ public interface Subscription {
     /**
      * Remove the subscription
      */
-    void remove() throws SubscriptionException;
+    void remove();
 }

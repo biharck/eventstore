@@ -26,7 +26,7 @@ public class RabbitMQPublisher implements Publisher, HasSubscribers {
     }
 
     @Override
-    public void publish(Message message) throws PublishException {
+    public void publish(Message message) {
         Channel channel = null;
         try {
             channel = channels.borrowObject();
@@ -45,7 +45,7 @@ public class RabbitMQPublisher implements Publisher, HasSubscribers {
     }
 
     @Override
-    public Subscription subscribe(String aggregation, Subscriber subscriber) throws SubscriptionException {
+    public Subscription subscribe(String aggregation, Subscriber subscriber)    {
         Channel channel = null;
         try {
             channel = channels.borrowObject();

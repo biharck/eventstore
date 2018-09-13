@@ -16,5 +16,5 @@ public interface Publisher {
      * Publish the publisher to all subscribers
      * @param message The Message to be published
      */
-    void publish(Message message) throws PublishException;
+    void publish(Message message);
 }
