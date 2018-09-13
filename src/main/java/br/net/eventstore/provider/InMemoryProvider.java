@@ -6,6 +6,7 @@ import br.net.eventstore.model.EventPayload;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -58,7 +59,11 @@ public class InMemoryProvider implements PersistenceProvider{
 
     @Override
     public Stream<String> getStreams(String aggregation) {
-        return Collections.list(store.get(aggregation).keys()).stream();
+        ConcurrentHashMap streams = store.get(aggregation);
+        if (streams != null) {
+            return Collections.list(streams.keys()).stream();
+        }
+        return Stream.empty();
 
     }
 
