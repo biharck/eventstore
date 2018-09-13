@@ -30,9 +30,13 @@ public class ChannelPool extends GenericObjectPool<Channel> {
         }
 
         @Override
-        public Channel create() throws Exception {
-            Connection conn = getConnection();
-            return conn.createChannel();
+        public Channel create() {
+            Connection connection = getConnection();
+            try {
+                return connection.createChannel();
+            } catch (Exception e) {
+                throw new ChannelException("Can not open a channel with rabbitmq", e);
+            }
         }
 
         @Override
@@ -40,13 +44,17 @@ public class ChannelPool extends GenericObjectPool<Channel> {
             return new DefaultPooledObject<>(obj);
         }
 
-        private Connection getConnection() throws Exception{
-            if (conn == null || !conn.isOpen()) {
-                ConnectionFactory factory = new ConnectionFactory();
-                factory.setUri(uri);
-                conn = factory.newConnection();
+        private Connection getConnection() {
+            try {
+                if (conn == null || !conn.isOpen()) {
+                    ConnectionFactory factory = new ConnectionFactory();
+                    factory.setUri(uri);
+                    conn = factory.newConnection();
+                }
+                return conn;
+            } catch (Exception e) {
+                throw new ConnectionException("Can not create connection with rabbitmq", e);
             }
-            return conn;
         }
 
         @Override
