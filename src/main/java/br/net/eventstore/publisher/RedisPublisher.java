@@ -75,19 +75,29 @@ public class RedisPublisher implements Publisher, HasSubscribers {
                         }
 
                         @Override
-                        public void message(String pattern, String channel, String message) { }
+                        public void message(String pattern, String channel, String message) {
+                            // Do nothing. We only need to handle direct messages
+                        }
 
                         @Override
-                        public void subscribed(String channel, long count) { }
+                        public void subscribed(String channel, long count) {
+                            // Do nothing. We only need to handle direct messages
+                        }
 
                         @Override
-                        public void psubscribed(String pattern, long count) { }
+                        public void psubscribed(String pattern, long count) {
+                            // Do nothing. We only need to handle direct messages
+                        }
 
                         @Override
-                        public void unsubscribed(String channel, long count) { }
+                        public void unsubscribed(String channel, long count) {
+                            // Do nothing. We only need to handle direct messages
+                        }
 
                         @Override
-                        public void punsubscribed(String pattern, long count) { }
+                        public void punsubscribed(String pattern, long count) {
+                            // Do nothing. We only need to handle direct messages
+                        }
                     };
 
                     connection.addListener(listener);
