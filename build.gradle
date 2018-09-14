@@ -73,7 +73,7 @@ sonarqube {
         property "sonar.issuesReport.html.enable", "true"
         property "sonar.scm.disabled", "true"
         property "sonar.junit.reportsPath", "$projectDir/build/test-results/test"
-        property "sonar.tests", "$projectDir/src/test/unit"
+        property "sonar.tests", "$projectDir/src/test/unit,$projectDir/src/test/integration"
         property "sonar.java.coveragePlugin", "jacoco"
         property "sonar.jacoco.reportPath", "$projectDir/build/jacoco/unitTest.exec"
         property "sonar.exclusions", []

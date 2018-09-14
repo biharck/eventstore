@@ -4,8 +4,8 @@ import br.net.eventstore.model.Event;
 import br.net.eventstore.model.EventPayload;
 import com.google.gson.Gson;
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
-import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -15,12 +15,12 @@ import java.util.stream.Stream;
  */
 public class RedisProvider implements PersistenceProvider{
 
-    private StatefulRedisPubSubConnection<String, String> connection;
+    private StatefulRedisConnection<String, String> connection;
     private RedisCommands<String, String> commands;
     private Gson serializer;
 
     public RedisProvider(RedisClient redisClient) {
-        connection = redisClient.connectPubSub();
+        connection = redisClient.connect();
         commands = connection.sync();
         serializer = new Gson();
     }
@@ -38,8 +38,8 @@ public class RedisProvider implements PersistenceProvider{
 
         commands.multi();
         commands.rpush(getKey(stream), serializer.toJson(newEvent));
-        commands.zadd("meta:aggregations:"+stream.getAggregation(), 1, stream.getId());
         commands.zadd("meta:aggregations", 1,stream.getAggregation());
+        commands.zadd("meta:aggregations:"+stream.getAggregation(), 1, stream.getId());
         commands.exec();
 
         return newEvent;

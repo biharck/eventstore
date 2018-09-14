@@ -20,7 +20,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
 public class InMemoryProviderTest {
 
     private final String EVENT_PAYLOAD = "Event Data";

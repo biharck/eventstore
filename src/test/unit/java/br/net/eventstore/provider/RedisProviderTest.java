@@ -1,103 +1,155 @@
 package br.net.eventstore.provider;
 
-import br.net.eventstore.EventStore;
-import br.net.eventstore.EventStoreBuilder;
-import br.net.eventstore.EventStream;
-import br.net.eventstore.model.EventPayload;
-import br.net.eventstore.publisher.InMemoryPublisher;
 import br.net.eventstore.model.Event;
+import br.net.eventstore.model.EventPayload;
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.api.StatefulRedisConnection;
+import io.lettuce.core.api.sync.RedisCommands;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class RedisProviderTest {
 
-    private final String EVENT_PAYLOAD = "Event Data";
-    private EventStore eventStore;
+    private RedisProvider redisProvider;
 
-    public RedisProviderTest() {
-        RedisClient.create("redis://localhost:6379/6").connect().sync().flushdb();
-    }
-    
+    @Mock private RedisClient redisClient;
+
+    @Mock private StatefulRedisConnection<String, String> connection;
+
+    @Mock private RedisCommands<String, String> commands;
+
+
     @Before
     public void setUp(){
-        eventStore = new EventStoreBuilder()
-                .setProvider(new RedisProvider("redis://localhost:6379/6"))
-                .setPublisher(new InMemoryPublisher())
-                .createEventStore();
+//        redisClient = mock(RedisClient.class);
+//        connection = mock(StatefulRedisConnection.class);
+//        commands = mock(RedisCommands.class);
+        when(redisClient.connect()).thenReturn(connection);
+        when(connection.sync()).thenReturn(commands);
+        redisProvider = new RedisProvider(redisClient);
     }
 
     @Test
-    public void shouldAddAnEventToTheEventStream(){
-        Event event = getEventStream("orders", "1").addEvent(new EventPayload(EVENT_PAYLOAD));
-        assertThat(event, notNullValue());
-        assertThat(event.getCommitTimestamp(), notNullValue());
-        assertThat(event.getSequence(), notNullValue());
+    public void shouldGetARangeOfEvents(){
+        when(commands.lrange(anyString(), anyLong(), anyLong()))
+                .thenReturn(Collections.singletonList("{ \"payload\": \"EVENT PAYLOAD\"}"));
+
+        Stream<Event> events = redisProvider.getEvents(
+                new br.net.eventstore.model.Stream("orders", "1"), 2, 5);
+
+        List<Event> result = events.collect(Collectors.toList());
+
+        assertThat(result.size(), is(1));
+        assertThat(result.get(0).getPayload(), is("EVENT PAYLOAD"));
+        verify(commands).lrange("orders:1", 2, 5);
     }
 
     @Test
-    public void shouldGetEventsFromTheEventStream(){
-        EventStream eventStream = getEventStream("orders", "2");
-        eventStream.addEvent(new EventPayload(EVENT_PAYLOAD));
-        List<Event> events = eventStream.getEvents().collect(Collectors.toList());
-        assertThat(events.size(), is(1));
-        assertThat(events.get(0).getPayload(), is(EVENT_PAYLOAD));
-        assertThat(events.get(0).getSequence(), is(0l));
+    public void shouldGetEvents(){
+        when(commands.lrange(anyString(), anyLong(), anyLong()))
+                .thenReturn(Collections.singletonList("{ \"payload\": \"EVENT PAYLOAD\"}"));
+
+        Stream<Event> events = redisProvider.getEvents(
+                new br.net.eventstore.model.Stream("orders", "1"));
+
+        List<Event> result = events.collect(Collectors.toList());
+
+        assertThat(result.size(), is(1));
+        assertThat(result.get(0).getPayload(), is("EVENT PAYLOAD"));
+        verify(commands).lrange("orders:1", 0, -1);
     }
 
     @Test
-    public void shouldGetRangedEventsFromTheEventStream(){
-        EventStream eventStream = getEventStream("orders", "2");
-        eventStream.addEvent(new EventPayload(EVENT_PAYLOAD));
-        eventStream.addEvent(new EventPayload(EVENT_PAYLOAD + "_1"));
-        eventStream.addEvent(new EventPayload(EVENT_PAYLOAD + "_2"));
-        List<Event> events = eventStream.getEvents(1,5).collect(Collectors.toList());
-        assertThat(events.size(), is(2));
-        assertThat(events.get(0).getPayload(), is(EVENT_PAYLOAD + "_1"));
-        assertThat(events.get(0).getSequence(), is(1l));
+    public void shouldGetARangeOfAggregations(){
+        when(commands.zrange(anyString(), anyLong(), anyLong()))
+                .thenReturn(Collections.singletonList("orders"));
+
+        Stream<String> aggregations = redisProvider.getAggregations(2, 5);
+
+        List<String> result = aggregations.collect(Collectors.toList());
+
+        assertThat(result.size(), is(1));
+        assertThat(result.get(0), is("orders"));
+        verify(commands).zrange("meta:aggregations", 2, 5);
     }
 
     @Test
-    public void shouldGetAggregationsFromTheEventStream(){
-        EventStream eventStream = getEventStream("orders", "3");
-        eventStream.addEvent(new EventPayload(EVENT_PAYLOAD));
-        List<String> aggregations = eventStore.getAggregations().collect(Collectors.toList());
-        assertThat(aggregations.size(), is(1));
+    public void shouldGetAggregations(){
+        when(commands.zrange(anyString(), anyLong(), anyLong()))
+                .thenReturn(Arrays.asList("orders", "offers", "checkout", "customers"));
+
+        Stream<String> aggregations = redisProvider.getAggregations();
+
+        List<String> result = aggregations.collect(Collectors.toList());
+
+        assertThat(result.size(), is(4));
+        assertThat(result.get(0), is("orders"));
+        verify(commands).zrange("meta:aggregations", 0, -1);
     }
 
     @Test
-    public void shouldGetStreamBasedOnAggregation(){
-        EventStream eventStream = getEventStream("orders", "4");
-        eventStream.addEvent(new EventPayload(EVENT_PAYLOAD));
-        List<String> orders = eventStore.getStreams("orders").collect(Collectors.toList());
-        assertThat(orders.size(), is(1));
+    public void shouldGetARangeOfStreams(){
+        when(commands.zrange(anyString(), anyLong(), anyLong()))
+                .thenReturn(Collections.singletonList("1"));
+
+        Stream<String> aggregations = redisProvider.getStreams("orders", 2, 5);
+
+        List<String> result = aggregations.collect(Collectors.toList());
+
+        assertThat(result.size(), is(1));
+        assertThat(result.get(0), is("1"));
+        verify(commands).zrange("meta:aggregations:orders", 2, 5);
     }
 
     @Test
-    public void shouldGetRangedAggregationsFromTheEventStream(){
-        EventStream eventStream = getEventStream("orders", "5");
-        eventStream.addEvent(new EventPayload(EVENT_PAYLOAD));
-        List<String> aggregations = eventStore.getAggregations(0, 1).collect(Collectors.toList());
-        assertThat(aggregations.size(), is(1));
+    public void shouldGetStreams(){
+        when(commands.zrange(anyString(), anyLong(), anyLong()))
+                .thenReturn(Arrays.asList("1", "2", "3", "4"));
+
+        Stream<String> aggregations = redisProvider.getStreams("orders");
+
+        List<String> result = aggregations.collect(Collectors.toList());
+
+        assertThat(result.size(), is(4));
+        assertThat(result.get(0), is("1"));
+        verify(commands).zrange("meta:aggregations:orders", 0, -1);
     }
 
     @Test
-    public void shouldGetRangedStreamBasedOnAggregation(){
-        EventStream eventStream = getEventStream("orders", "6");
-        eventStream.addEvent(new EventPayload(EVENT_PAYLOAD));
-        List<String> orders = eventStore.getStreams("orders", 0, 1).collect(Collectors.toList());
-        assertThat(orders.size(), is(1));
-    }
+    public void shouldAddEventToStream(){
+        when(commands.incr(anyString())).thenReturn(1l);
+        when(commands.time()).thenReturn(Collections.singletonList("1"));
 
-    protected EventStream getEventStream(String aggregation, String streamId) {
-        return eventStore.getEventStream(aggregation, streamId);
-    }
+        Event event = redisProvider.addEvent(
+                new br.net.eventstore.model.Stream("orders", "1"),
+                new EventPayload("EVENT PAYLOAD"));
 
+        assertThat(event.getSequence(), is(0l));
+        assertThat(event.getCommitTimestamp(), is(1l));
+        verify(commands).incr("sequences:{orders:1}");
+        verify(commands).time();
+        verify(commands).multi();
+        verify(commands).rpush("orders:1", "{\"payload\":\"EVENT PAYLOAD\",\"commitTimestamp\":1,\"sequence\":0}");
+        verify(commands).zadd("meta:aggregations", 1.0, "orders");
+        verify(commands).zadd("meta:aggregations:orders", 1.0, "1");
+        verify(commands).exec();
+    }
 }
