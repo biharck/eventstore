@@ -34,7 +34,7 @@ public class RedisProvider implements PersistenceProvider{
 
         long sequence = commands.incr("sequences:{" + getKey(stream) + "}")-1;
         long timestamp = Long.parseLong(commands.time().get(0));
-        Event newEvent = new Event(payload.getData(), timestamp, sequence);
+        Event newEvent = new Event(payload, timestamp, sequence);
 
         commands.multi();
         commands.rpush(getKey(stream), serializer.toJson(newEvent));

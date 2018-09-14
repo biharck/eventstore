@@ -11,7 +11,7 @@ public class SQLProvider implements PersistenceProvider {
     @Override
     public Event addEvent(br.net.eventstore.model.Stream stream, EventPayload payload) {
 
-        Event newEvent = new Event(payload.getData(), System.currentTimeMillis(), 1);
+        Event newEvent = new Event(payload, System.currentTimeMillis(), 1);
 
         return newEvent;
     }

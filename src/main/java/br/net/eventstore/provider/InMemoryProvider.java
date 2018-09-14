@@ -28,7 +28,7 @@ public class InMemoryProvider implements PersistenceProvider{
         writeLock.lock();
         try {
 
-            Event newEvent = new Event(payload.getData(), System.currentTimeMillis(), currentEvents.size());
+            Event newEvent = new Event(payload, System.currentTimeMillis(), currentEvents.size());
             currentEvents.add(newEvent);
             return newEvent;
         } finally {

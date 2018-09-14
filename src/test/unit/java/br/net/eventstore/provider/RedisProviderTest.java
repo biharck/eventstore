@@ -48,7 +48,7 @@ public class RedisProviderTest {
         eventStream.addEvent(new EventPayload(EVENT_PAYLOAD));
         List<Event> events = eventStream.getEvents().collect(Collectors.toList());
         assertThat(events.size(), is(1));
-        assertThat(events.get(0).getPayload(), is(EVENT_PAYLOAD));
+        assertThat(events.get(0).getPayload().getData(), is(EVENT_PAYLOAD));
         assertThat(events.get(0).getSequence(), is(0l));
     }
 
@@ -60,7 +60,7 @@ public class RedisProviderTest {
         eventStream.addEvent(new EventPayload(EVENT_PAYLOAD + "_2"));
         List<Event> events = eventStream.getEvents(1,5).collect(Collectors.toList());
         assertThat(events.size(), is(2));
-        assertThat(events.get(0).getPayload(), is(EVENT_PAYLOAD + "_1"));
+        assertThat(events.get(0).getPayload().getData(), is(EVENT_PAYLOAD + "_1"));
         assertThat(events.get(0).getSequence(), is(1l));
     }
 
