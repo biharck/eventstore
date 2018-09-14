@@ -49,7 +49,7 @@ public class RabbitMQPublisherIntegrationTest {
         eventStore.subscribe(ordersStream.getAggregation(), message -> {
             assertThat(message.getStream().getId(), is(ordersStream.getStreamId()));
             assertThat(message.getStream().getAggregation(), is(ordersStream.getAggregation()));
-            assertThat(message.getEvent().getPayload(), is(EVENT_PAYLOAD));
+            assertThat(message.getEvent().getPayload().getData(), is(EVENT_PAYLOAD));
             count++;
         });
 

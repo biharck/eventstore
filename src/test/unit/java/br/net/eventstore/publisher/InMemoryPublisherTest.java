@@ -35,7 +35,7 @@ public class InMemoryPublisherTest {
         eventStore.subscribe(ordersStream.getAggregation(), message -> {
             assertThat(message.getStream().getAggregation(), is(ordersStream.getAggregation()));
             assertThat(message.getStream().getId(), is(ordersStream.getStreamId()));
-            assertThat(message.getEvent().getPayload(), is(EVENT_PAYLOAD));
+            assertThat(message.getEvent().getPayload().getData(), is(EVENT_PAYLOAD));
         });
 
         ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));

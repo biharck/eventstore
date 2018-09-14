@@ -49,7 +49,7 @@ public class RedisPublisherTest {
         eventStoreNotified.subscribe(ordersStream.getAggregation(), message -> {
             assertThat(message.getStream().getAggregation(), is(ordersStream.getAggregation()));
             assertThat(message.getStream().getId(), is(ordersStream.getStreamId()));
-            assertThat(message.getEvent().getPayload(), is(EVENT_PAYLOAD));
+            assertThat(message.getEvent().getPayload().getData(), is(EVENT_PAYLOAD));
             count++;
         });
 
