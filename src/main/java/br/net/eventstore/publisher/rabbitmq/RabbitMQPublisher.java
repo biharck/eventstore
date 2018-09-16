@@ -45,7 +45,7 @@ public class RabbitMQPublisher implements Publisher, HasSubscribers {
     }
 
     @Override
-    public Subscription subscribe(String aggregation, Subscriber subscriber)    {
+    public Subscription subscribe(String aggregation, Subscriber subscriber) {
         Channel channel = null;
         try {
             channel = channels.borrowObject();

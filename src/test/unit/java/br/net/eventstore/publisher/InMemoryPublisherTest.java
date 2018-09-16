@@ -1,57 +1,74 @@
 package br.net.eventstore.publisher;
 
-import br.net.eventstore.EventStore;
-import br.net.eventstore.EventStoreBuilder;
-import br.net.eventstore.EventStream;
+import br.net.eventstore.model.Event;
 import br.net.eventstore.model.EventPayload;
-import br.net.eventstore.provider.InMemoryProvider;
+import br.net.eventstore.model.Message;
+import br.net.eventstore.model.Stream;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
+@RunWith(MockitoJUnitRunner.class)
 public class InMemoryPublisherTest {
 
-    protected final String EVENT_PAYLOAD = "Event Data";
-    protected EventStore eventStore;
-    protected EventStream ordersStream;
-    protected int count = 0;
+    private final String EVENT_PAYLOAD = "Event Data";
+    private InMemoryPublisher memoryPublisher;
 
     @Before
     public void setUp(){
-        String streamId = "1";
-        String aggregation = "orders";
-        eventStore = new EventStoreBuilder()
-                .setProvider(new InMemoryProvider())
-                .setPublisher(new InMemoryPublisher())
-                .createEventStore();;
-        ordersStream = eventStore.getEventStream(aggregation, streamId);
+        memoryPublisher = new InMemoryPublisher();
     }
 
     @Test
-    public void shouldListenToEventsInTheEventStream(){
+    public void shouldPublishMessagesToListeners(){
+        Message message = new Message()
+                .setStream(new Stream("orders", "1"))
+                .setEvent(new Event(new EventPayload(EVENT_PAYLOAD), 123, 2));
 
-        eventStore.subscribe(ordersStream.getAggregation(), message -> {
-            assertThat(message.getStream().getAggregation(), is(ordersStream.getAggregation()));
-            assertThat(message.getStream().getId(), is(ordersStream.getStreamId()));
-            assertThat(message.getEvent().getPayload().getData(), is(EVENT_PAYLOAD));
-        });
+        Subscriber subscriberStub = Mockito.mock(Subscriber.class);
+        memoryPublisher.subscribe("orders", subscriberStub);
+        memoryPublisher.publish(message);
 
-        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
+        verify(subscriberStub).on(message);
     }
 
     @Test
-    public void shouldUnsubscribeToTheEventStream(){
-        count = 0;
-        Subscription subscription = eventStore.subscribe(ordersStream.getAggregation(), message -> {
-            count++;
-        });
+    public void shouldNotifyMultipleListeners(){
+        Message message = new Message()
+                .setStream(new Stream("orders", "1"))
+                .setEvent(new Event(new EventPayload(EVENT_PAYLOAD), 123, 2));
 
-        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
-        assertThat(count, is(1));
-        subscription.remove();
-        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
-        assertThat(count, is(1));
+        Subscriber subscriberStub = Mockito.mock(Subscriber.class);
+        Subscriber subscriber2Stub = Mockito.mock(Subscriber.class);
+
+        memoryPublisher.subscribe("orders", subscriberStub);
+        memoryPublisher.subscribe("orders", subscriber2Stub);
+
+        memoryPublisher.publish(message);
+
+        verify(subscriberStub).on(message);
+        verify(subscriber2Stub).on(message);
     }
+
+    @Test
+    public void shouldNotifyOnlyTheRightListeners(){
+        Message message = new Message()
+                .setStream(new Stream("offers", "1"))
+                .setEvent(new Event(new EventPayload(EVENT_PAYLOAD), 123, 2));
+
+        Subscriber subscriberStub = Mockito.mock(Subscriber.class);
+        memoryPublisher.subscribe("orders", subscriberStub);
+
+        memoryPublisher.publish(message); // status
+        verify(subscriberStub, never()).on(message);
+    }
+
 }
