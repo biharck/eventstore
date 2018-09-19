@@ -1,83 +1,94 @@
 package br.net.eventstore.publisher;
 
-import br.net.eventstore.EventStore;
-import br.net.eventstore.EventStoreBuilder;
-import br.net.eventstore.EventStream;
+import br.net.eventstore.model.Event;
 import br.net.eventstore.model.EventPayload;
-import br.net.eventstore.provider.InMemoryProvider;
+import br.net.eventstore.model.Message;
+import br.net.eventstore.model.Stream;
 import io.lettuce.core.RedisClient;
+import io.lettuce.core.pubsub.RedisPubSubListener;
+import io.lettuce.core.pubsub.StatefulRedisPubSubConnection;
+import io.lettuce.core.pubsub.api.async.RedisPubSubAsyncCommands;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.concurrent.TimeUnit;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import static org.awaitility.Awaitility.await;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-
+@RunWith(MockitoJUnitRunner.class)
 public class RedisPublisherTest {
 
-    protected final String EVENT_PAYLOAD = "Event Data";
-    protected EventStore eventStore;
-    protected EventStream ordersStream;
-    protected int count = 0;
+    private final String EVENT_PAYLOAD = "Event Data";
+    private RedisPublisher redisPublisher;
 
-    public RedisPublisherTest() {
-        RedisClient.create("redis://127.0.0.1:6379/6").connect().sync().flushdb();
-    }
+    @Mock
+    private RedisClient redisClient;
+
+    @Mock private StatefulRedisPubSubConnection<String, String> connection;
+
+    @Mock private RedisPubSubAsyncCommands<String, String> commands;
 
 
     @Before
     public void setUp(){
-        String streamId = "1";
-        String aggregation = "orders";
-        eventStore = new EventStoreBuilder()
-                .setProvider(new InMemoryProvider())
-                .setPublisher(new RedisPublisher("redis://127.0.0.1:6379/6"))
-                .createEventStore();
-        ordersStream = eventStore.getEventStream(aggregation, streamId);
+        when(redisClient.connectPubSub()).thenReturn(connection);
+        when(connection.async()).thenReturn(commands);
+        redisPublisher = new RedisPublisher(redisClient);
     }
 
     @Test
-    public void shouldListenToEventsInTheEventStream(){
+    public void shouldPublishMessagesToRedis(){
+        Message message = new Message()
+                .setStream(new Stream("orders", "1"))
+                .setEvent(new Event(new EventPayload(EVENT_PAYLOAD), 123, 2));
 
-        EventStore eventStoreNotified = new EventStoreBuilder()
-                .setProvider(new InMemoryProvider())
-                .setPublisher(new RedisPublisher("redis://127.0.0.1:6379/6"))
-                .createEventStore();
-        count = 0;
-        eventStoreNotified.subscribe(ordersStream.getAggregation(), message -> {
-            assertThat(message.getStream().getAggregation(), is(ordersStream.getAggregation()));
-            assertThat(message.getStream().getId(), is(ordersStream.getStreamId()));
-            assertThat(message.getEvent().getPayload().getData(), is(EVENT_PAYLOAD));
-            count++;
-        });
+        redisPublisher.publish(message);
 
-        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
-        await().atMost(10, TimeUnit.SECONDS).until(() -> count == 1);
+        verify(commands).publish(message.getStream().getAggregation(),
+                "{\"stream\":{\"aggregation\":\"orders\",\"id\":\"1\"},\"event\":{\"payload\":{\"data\":\""
+                        +EVENT_PAYLOAD+"\"},\"commitTimestamp\":123,\"sequence\":2}}");
     }
 
     @Test
-    public void shouldUnsubscribeToTheEventStream(){
-        EventStore eventStoreNotified = new EventStoreBuilder()
-                .setProvider(new InMemoryProvider())
-                .setPublisher(new RedisPublisher("redis://127.0.0.1:6379/6"))
-                .createEventStore();
-        count = 0;
-        Subscription subscription = eventStoreNotified.subscribe(ordersStream.getAggregation(), message -> {
-            count++;
-        });
+    public void shouldSubscribeToChangesInEventStore(){
+        Message message = new Message()
+                .setStream(new Stream("orders", "1"))
+                .setEvent(new Event(new EventPayload(EVENT_PAYLOAD), 123, 2));
 
-        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
 
-        await().atMost(10, TimeUnit.SECONDS).until(() -> count == 1);
+        Subscriber subscriberOrdersStub = mock(Subscriber.class);
+        Subscriber subscriberOrders2Stub = mock(Subscriber.class);
+        Subscription subscription = redisPublisher.subscribe("orders", subscriberOrdersStub);
+        redisPublisher.subscribe("orders", subscriberOrders2Stub);
+
         subscription.remove();
 
-        await().atLeast(2, TimeUnit.SECONDS);
-        ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD));
-        await().atLeast(2, TimeUnit.SECONDS);
-        assertThat(count, is(1));
+        verify(commands, times(1)).subscribe("orders");
+        verify(connection, times(1)).addListener(Mockito.any(RedisPubSubListener.class));
+        verify(commands, never()).unsubscribe("orders");
     }
 
+    @Test
+    public void shouldUnsubscribeToChangesInEventStore(){
+        Message message = new Message()
+                .setStream(new Stream("orders", "1"))
+                .setEvent(new Event(new EventPayload(EVENT_PAYLOAD), 123, 2));
+
+
+        Subscriber subscriberOrdersStub = mock(Subscriber.class);
+        Subscription subscription = redisPublisher.subscribe("orders", subscriberOrdersStub);
+
+        subscription.remove();
+
+        verify(commands, times(1)).subscribe("orders");
+        verify(connection, times(1)).addListener(Mockito.any(RedisPubSubListener.class));
+        verify(commands, times(1)).unsubscribe("orders");
+    }
 
 }

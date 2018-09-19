@@ -28,8 +28,6 @@ public class RabbitMQPublisherTest {
     private EventStream ordersStream;
     @Mock private ChannelPool pool;
 
-    @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
-
     @Before
     public void setUp(){
         String streamId = "1";

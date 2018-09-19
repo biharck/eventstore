@@ -53,8 +53,10 @@ public class RedisPublisher implements Publisher, HasSubscribers {
         aggregateListeners.add(subscriber);
 
         return () -> {
-            commands.unsubscribe(aggregation);
             aggregateListeners.remove(subscriber);
+            if (aggregateListeners.isEmpty()) {
+                commands.unsubscribe(aggregation);
+            }
         };
     }
 

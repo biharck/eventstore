@@ -20,8 +20,8 @@ import java.util.stream.Stream;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -39,9 +39,6 @@ public class RedisProviderTest {
 
     @Before
     public void setUp(){
-//        redisClient = mock(RedisClient.class);
-//        connection = mock(StatefulRedisConnection.class);
-//        commands = mock(RedisCommands.class);
         when(redisClient.connect()).thenReturn(connection);
         when(connection.sync()).thenReturn(commands);
         redisProvider = new RedisProvider(redisClient);
@@ -141,15 +138,18 @@ public class RedisProviderTest {
         Event event = redisProvider.addEvent(
                 new br.net.eventstore.model.Stream("orders", "1"),
                 new EventPayload("EVENT PAYLOAD"));
+        redisProvider.addEvent(
+                new br.net.eventstore.model.Stream("orders", "1"),
+                new EventPayload("EVENT PAYLOAD"));
 
         assertThat(event.getSequence(), is(0l));
         assertThat(event.getCommitTimestamp(), is(1l));
-        verify(commands).incr("sequences:{orders:1}");
-        verify(commands).time();
-        verify(commands).multi();
-        verify(commands).rpush("orders:1", "{\"payload\":{\"data\":\"EVENT PAYLOAD\"},\"commitTimestamp\":1,\"sequence\":0}");
-        verify(commands).zadd("meta:aggregations", 1.0, "orders");
-        verify(commands).zadd("meta:aggregations:orders", 1.0, "1");
-        verify(commands).exec();
+        verify(commands, times(2)).incr("sequences:{orders:1}");
+        verify(commands, times(2)).time();
+        verify(commands, times(2)).multi();
+        verify(commands, times(2)).rpush("orders:1", "{\"payload\":{\"data\":\"EVENT PAYLOAD\"},\"commitTimestamp\":1,\"sequence\":0}");
+        verify(commands, times(2)).zadd("meta:aggregations", 1.0, "orders");
+        verify(commands, times(2)).zadd("meta:aggregations:orders", 1.0, "1");
+        verify(commands, times(2)).exec();
     }
 }

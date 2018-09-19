@@ -10,9 +10,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
@@ -66,6 +63,21 @@ public class InMemoryPublisherTest {
 
         Subscriber subscriberStub = Mockito.mock(Subscriber.class);
         memoryPublisher.subscribe("orders", subscriberStub);
+
+        memoryPublisher.publish(message); // status
+        verify(subscriberStub, never()).on(message);
+    }
+
+    @Test
+    public void shouldUnsubscribeListener(){
+        Message message = new Message()
+                .setStream(new Stream("orders", "1"))
+                .setEvent(new Event(new EventPayload(EVENT_PAYLOAD), 123, 2));
+
+        Subscriber subscriberStub = Mockito.mock(Subscriber.class);
+        Subscription subscription = memoryPublisher.subscribe("orders", subscriberStub);
+
+        subscription.remove();
 
         memoryPublisher.publish(message); // status
         verify(subscriberStub, never()).on(message);
