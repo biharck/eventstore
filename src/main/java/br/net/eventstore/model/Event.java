@@ -7,7 +7,7 @@ import br.net.eventstore.EventStream;
  */
 public class Event {
 
-    private EventPayload payload;
+    private String payload;
     private long commitTimestamp;
     private long sequence;
 
@@ -19,7 +19,7 @@ public class Event {
      * @param sequence The auto increment value which defines the event order
      */
     public Event(EventPayload payload, long commitTimestamp, long sequence) {
-        this.payload = payload;
+        this.payload = payload.getData();
         this.commitTimestamp = commitTimestamp;
         this.sequence = sequence;
     }
@@ -28,7 +28,7 @@ public class Event {
      * Retrieve the event payload. The payload can be any data associated with the event
      * @return The event payload
      */
-    public EventPayload getPayload() {
+    public String getPayload() {
         return payload;
     }
 

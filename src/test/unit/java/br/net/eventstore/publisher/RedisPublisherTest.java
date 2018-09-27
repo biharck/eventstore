@@ -51,8 +51,8 @@ public class RedisPublisherTest {
         redisPublisher.publish(message);
 
         verify(commands).publish(message.getStream().getAggregation(),
-                "{\"stream\":{\"aggregation\":\"orders\",\"id\":\"1\"},\"event\":{\"payload\":{\"data\":\""
-                        +EVENT_PAYLOAD+"\"},\"commitTimestamp\":123,\"sequence\":2}}");
+                "{\"stream\":{\"aggregation\":\"orders\",\"id\":\"1\"},\"event\":{\"payload\":\""
+                        +EVENT_PAYLOAD+"\",\"commitTimestamp\":123,\"sequence\":2}}");
     }
 
     @Test

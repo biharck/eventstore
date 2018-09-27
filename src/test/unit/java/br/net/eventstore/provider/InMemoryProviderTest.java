@@ -42,7 +42,7 @@ public class InMemoryProviderTest {
         assertThat(event, notNullValue());
         assertThat(event.getCommitTimestamp(), notNullValue());
         assertThat(event.getSequence(), notNullValue());
-        assertThat(event.getPayload().getData(), is(EVENT_PAYLOAD));
+        assertThat(event.getPayload(), is(EVENT_PAYLOAD));
     }
 
     @Test
@@ -51,7 +51,7 @@ public class InMemoryProviderTest {
         ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD + "_1"));
         List<Event> events = ordersStream.getEvents().collect(Collectors.toList());
         assertThat(events.size(), is(2));
-        assertThat(events.get(0).getPayload().getData(), is(EVENT_PAYLOAD));
+        assertThat(events.get(0).getPayload(), is(EVENT_PAYLOAD));
         assertThat(events.get(0).getSequence(), is(0l));
     }
 
@@ -62,7 +62,7 @@ public class InMemoryProviderTest {
         ordersStream.addEvent(new EventPayload(EVENT_PAYLOAD + "_2"));
         List<Event> events = ordersStream.getEvents(1,5).collect(Collectors.toList());
         assertThat(events.size(), is(2));
-        assertThat(events.get(0).getPayload().getData(), is(EVENT_PAYLOAD + "_1"));
+        assertThat(events.get(0).getPayload(), is(EVENT_PAYLOAD + "_1"));
         assertThat(events.get(0).getSequence(), is(1l));
     }
 

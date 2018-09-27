@@ -47,7 +47,7 @@ public class RedisProviderTest {
     @Test
     public void shouldGetARangeOfEvents(){
         when(commands.lrange(anyString(), anyLong(), anyLong()))
-                .thenReturn(Collections.singletonList("{ \"payload\": {\"data\": \"EVENT PAYLOAD\"} }"));
+                .thenReturn(Collections.singletonList("{ \"payload\": \"EVENT PAYLOAD\" }"));
 
         Stream<Event> events = redisProvider.getEvents(
                 new br.net.eventstore.model.Stream("orders", "1"), 2, 5);
@@ -55,14 +55,14 @@ public class RedisProviderTest {
         List<Event> result = events.collect(Collectors.toList());
 
         assertThat(result.size(), is(1));
-        assertThat(result.get(0).getPayload().getData(), is("EVENT PAYLOAD"));
+        assertThat(result.get(0).getPayload(), is("EVENT PAYLOAD"));
         verify(commands).lrange("orders:1", 2, 5);
     }
 
     @Test
     public void shouldGetEvents(){
         when(commands.lrange(anyString(), anyLong(), anyLong()))
-                .thenReturn(Collections.singletonList("{ \"payload\": {\"data\": \"EVENT PAYLOAD\"} }"));
+                .thenReturn(Collections.singletonList("{ \"payload\": \"EVENT PAYLOAD\" }"));
 
         Stream<Event> events = redisProvider.getEvents(
                 new br.net.eventstore.model.Stream("orders", "1"));
@@ -70,7 +70,7 @@ public class RedisProviderTest {
         List<Event> result = events.collect(Collectors.toList());
 
         assertThat(result.size(), is(1));
-        assertThat(result.get(0).getPayload().getData(), is("EVENT PAYLOAD"));
+        assertThat(result.get(0).getPayload(), is("EVENT PAYLOAD"));
         verify(commands).lrange("orders:1", 0, -1);
     }
 
@@ -147,7 +147,7 @@ public class RedisProviderTest {
         verify(commands, times(2)).incr("sequences:{orders:1}");
         verify(commands, times(2)).time();
         verify(commands, times(2)).multi();
-        verify(commands, times(2)).rpush("orders:1", "{\"payload\":{\"data\":\"EVENT PAYLOAD\"},\"commitTimestamp\":1,\"sequence\":0}");
+        verify(commands, times(2)).rpush("orders:1", "{\"payload\":\"EVENT PAYLOAD\",\"commitTimestamp\":1,\"sequence\":0}");
         verify(commands, times(2)).zadd("meta:aggregations", 1.0, "orders");
         verify(commands, times(2)).zadd("meta:aggregations:orders", 1.0, "1");
         verify(commands, times(2)).exec();
